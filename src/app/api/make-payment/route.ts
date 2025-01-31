@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
     console.log(hashString)
 
     // Make the request to Easebuzz
-    const easebuzzResponse = await fetch('https://testpay.easebuzz.in/payment/initiateLink', {
+    const easebuzzResponse = await fetch('https://pay.easebuzz.in/payment/initiateLink', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

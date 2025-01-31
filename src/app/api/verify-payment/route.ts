@@ -70,7 +70,7 @@ class EasebuzzVerification {
 
     try {
       const response = await fetch(
-        'https://testdashboard.easebuzz.in/transaction/v1/retrieve',
+        'https://dashboard.easebuzz.in/transaction/v1/retrieve',
         {
           method: 'POST',
           headers: {
