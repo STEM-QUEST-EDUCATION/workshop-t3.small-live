@@ -1,14 +1,17 @@
 import React from "react";
 import Image from "next/image";
-// import { analytics } from "@/lib/firebaseConfig";
-// import { logEvent } from "firebase/analytics";
+import { analytics, logEvent } from "@/lib/firebaseConfig";
+
+const handleLinkClick = (linkName: string) => {
+  console.log(`Logging event for link: ${linkName}`);
+  if (analytics) {
+    logEvent(analytics, "more_questions", { link_name: linkName });
+  } else {
+    console.warn("Analytics is not initialized");
+  }
+};
 
 const Footer: React.FC = () => {
-  const handleLinkClick = (linkName: string) => {
-    console.log(`Logging event for link: ${linkName}`);
-    // logEvent(analytics, "more_questions", { link_name: linkName });
-  };
-
   return (
     <footer
       className={`bg-gradient-to-r from-customPink to-customYellow p-2 text-center fixed left-0 bottom-0 w-full flex flex-col items-center justify-center lg:justify-center lg:items-center z-50`}
@@ -66,8 +69,5 @@ const Footer: React.FC = () => {
     </footer>
   );
 };
-
-
-
 
 export default Footer;

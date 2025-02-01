@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { UsersRound, CalendarDays, Tag } from "lucide-react";
+import { logEvent, analytics } from "@/lib/firebaseConfig";
 
 interface WorkshopCardProps {
   _id: string;
@@ -58,7 +59,12 @@ export function WorkshopCard({
   async (e: React.MouseEvent) => {
     e.preventDefault();
     console.log("Explore button clicked for workshop ID:", _id); // Add this line
-   
+
+    // Log the click event to Firebase Analytics if analytics is supported
+    if (analytics) {
+      logEvent(analytics, "explore_button_click", { workshop_id: _id });
+    }
+
     try {
       router.push(`/${_id}`);
       console.log("Navigating to:", `/${_id}`); // Add this line
