@@ -203,7 +203,10 @@ const TicketCardWithActions: React.FC<TicketCardProps> = () => {
 
                   <div className="text-left w-full px-6 mb-4 flex space-x-4">
                     <p className="text-base font-medium">₹{perChildAmount}</p>
-                    <p className="text-base font-medium">{ticket.paymentMode}</p>
+                    {/* Conditionally render payment mode */}
+                    {ticket.paymentMode !== 'Paid' && ( 
+                      <p className="text-base font-medium">{ticket.paymentMode}</p>
+                    )}
                   </div>
 
                   <div className="flex space-x-2 mt-6">
@@ -234,17 +237,6 @@ const TicketCardWithActions: React.FC<TicketCardProps> = () => {
               Save your Tickets
             </span>
           </button>
-
-          {currentTicket.paymentMode !== 'Paid' && (
-            <button
-              onClick={() => { }}
-              className="w-[162px] h-[52px] rounded-lg bg-green-500 flex items-center justify-center"
-            >
-              <span className="font-nunito font-bold text-[14px] leading-4 text-white">
-                Pay at Centre
-              </span>
-            </button>
-          )}
         </div>
         <button
           onClick={handleSharePDF}

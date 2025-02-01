@@ -59,6 +59,7 @@ export function useTicketData() {
           const updatedData = data.map((ticket) => ({
             ...ticket,
             location: workshopDetails.location || ticket.location,
+            date : workshopDetails.date,
           }));
           setTicketData(updatedData);
         } else if (data.error) {
@@ -74,6 +75,7 @@ export function useTicketData() {
         setIsLoading(false);
       }
     }
+    console.log("DATA - ", workshopDetails)
 
     fetchTicketData();
   }, [contextTransactionId, workshopDetails.location]);

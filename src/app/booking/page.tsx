@@ -122,7 +122,7 @@ export default function HomePage() {
           if (typeof window.EasebuzzCheckout === "function") {
             const easebuzzCheckout = new window.EasebuzzCheckout(
               `process.env.NEXT_PUBLIC_EASEBUZZ_KEY`,
-              "prod"
+              "test"
             );
             const options: EasebuzzCheckoutOptions = {
               access_key: accessKey,
