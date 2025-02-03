@@ -34,9 +34,12 @@ const WinnerCard: React.FC<WinnerCardProps> = ({
   }, []);
 
   return (
+    
     <div className="winner-card relative w-[374px] h-[206px] rounded-lg overflow-hidden shadow-lg mb-4">
       {/* Confetti Animation */}
-      <Confetti
+      <div className="relative h-full w-full max-w-md overflow-hidden rounded-xl bg-blue-200 before:absolute before:-top-1/2 before:-left-1/2 before:h-[200%] before:w-[200%] before:animate-move-pattern before:bg-[radial-gradient(circle,#ffffff_10%,transparent_20%),radial-gradient(circle,transparent_10%,#fffd50_20%)] before:bg-[length:30px_30px] before:content-[''] z-10">
+      <Confetti                                                                                                                                                                               
+
         width={windowSize.width}
         height={windowSize.height}
         numberOfPieces={100} // Reduce the number for smaller effects
@@ -45,15 +48,8 @@ const WinnerCard: React.FC<WinnerCardProps> = ({
         wind={0.01} // Slight drift
       />
 
-      <video
-        className="absolute top-0 left-0 w-full h-full object-cover"
-        autoPlay
-        loop
-        muted
-      >
-        <source src="/WinnerCard/video.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+     
+    
 
       {/* Overlay content */}
       <div className="relative">
@@ -81,7 +77,7 @@ const WinnerCard: React.FC<WinnerCardProps> = ({
         </div>
 
         {/* Main Content */}
-        <div className="flex px-4">
+        <div className="flex px-4 z-40">
           {/* Profile Image Section */}
           <div className="relative w-[134px] h-[153px]">
             {/* <img src="https://dashboard.codeparrot.ai/api/assets/Z39ohkjX1HzWCC20" alt="" className="absolute -top-2 left-20 w-[62px] h-[62px]" /> */}
@@ -98,12 +94,12 @@ const WinnerCard: React.FC<WinnerCardProps> = ({
               height={10}
               width={10}
               alt=""
-              className="absolute right-[75px] top-[110px] w-[70px] z-10 h-[64px]"
+              className="absolute right-[75px] top-[110px] w-[70px] h-[64px] z-50"
             />
           </div>
 
           {/* Details Section */}
-          <div className="ml-4 mt-2">
+          <div className="ml-4 mt-2 z-20">
             <h3 className="text-[#0c5394] font-bold text-sm xxs:text-xs">
               {name}
             </h3>
@@ -150,7 +146,7 @@ const WinnerCard: React.FC<WinnerCardProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="absolute bottom-0 w-full z-0">
+      <div className="absolute bottom-0 w-full z-40">
         <Image
           src="https://dashboard.codeparrot.ai/api/assets/Z4DwMQIBBLnlud3A"
           height={10}
@@ -216,7 +212,11 @@ const WinnerCard: React.FC<WinnerCardProps> = ({
         </div>
       </div>
     </div>
+    </div>
   );
 };
 
 export default WinnerCard;
+
+
+

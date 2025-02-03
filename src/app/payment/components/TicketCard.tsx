@@ -145,10 +145,10 @@ const TicketCardWithActions: React.FC<TicketCardProps> = () => {
             <div key={index} className="flex-shrink-0 w-full flex justify-center">
               <div
                 ref={ticketRef}
-                className="w-[350px] h-[553px] bg-cover bg-center bg-no-repeat rounded-lg p-6 text-white relative"
+                className="w-[350px] h-[553px] bg-white bg-cover bg-center bg-no-repeat rounded-lg p-6 text-white relative"
                 style={{
                   backgroundImage: "url('/ticket/ticketBG.png')",
-                  backgroundColor: '#1a1a1a',
+                  backgroundColor: '#ffffff',
                 }}
               >
                 <div className="flex flex-col items-center">
@@ -231,7 +231,7 @@ const TicketCardWithActions: React.FC<TicketCardProps> = () => {
         <div className="flex justify-center gap-4">
           <button
             onClick={generatePDF}
-            className="w-[162px] h-[52px] rounded-lg bg-blue-500 flex items-center justify-center"
+            className="w-[330px] h-[52px] rounded-lg bg-blue-500 flex items-center justify-center"
           >
             <span className="font-nunito font-bold text-[14px] leading-4 text-white">
               Save your Tickets

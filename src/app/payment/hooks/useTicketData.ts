@@ -59,7 +59,7 @@ export function useTicketData() {
           const updatedData = data.map((ticket) => ({
             ...ticket,
             location: workshopDetails.location || ticket.location,
-            date : workshopDetails.date,
+            date: workshopDetails.date ,
           }));
           setTicketData(updatedData);
         } else if (data.error) {
