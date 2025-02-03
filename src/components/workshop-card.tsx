@@ -30,8 +30,6 @@ export function WorkshopCard({
 }: WorkshopCardProps) {
   const router = useRouter();
 
-
-
   // Memoize the formatted date
   const formattedDate = useMemo(() => {
     try {
@@ -56,28 +54,28 @@ export function WorkshopCard({
 
   // Optimized navigation handler - removed theme from dependencies since it's not used in the function
   const handleExploreClick = useCallback(
-  async (e: React.MouseEvent) => {
-    e.preventDefault();
-    console.log("Explore button clicked for workshop ID:", _id); // Add this line
+    async (e: React.MouseEvent) => {
+      e.preventDefault();
+      console.log("Explore button clicked for workshop ID:", _id); // Add this line
 
-    // Log the click event to Firebase Analytics if analytics is supported
-    if (analytics) {
-      logEvent(analytics, "explore_button_click", { workshop_id: _id });
-    }
+      // Log the click event to Firebase Analytics if analytics is supported
+      if (analytics) {
+        logEvent(analytics, "explore_button_click", { workshop_id: _id });
+      }
 
-    try {
-      router.push(`/${_id}`);
-      console.log("Navigating to:", `/${_id}`); // Add this line
-    } catch (error) {
-      console.error("Navigation error:", error);
-    }
-  },
-  [router, _id] 
-);
-
+      try {
+        router.push(`/${_id}`);
+        console.log("Navigating to:", `/${_id}`); // Add this line
+      } catch (error) {
+        console.error("Navigation error:", error);
+      }
+    },
+    [router, _id]
+  );
 
   return (
-    <Card className="rounded-[12px] overflow-hidden mb-4 shadow-md hover:shadow-lg transition-shadow duration-300">
+    <Card className="rounded-[12px] overflow-hidden mb-4 shadow-md hover:shadow-lg transition-shadow duration-300 scroll-snap-align-start relative group">
+      <div className="absolute inset-0 rounded-[12px] border-2 border-transparent group-hover:border-blue-300 animate-light-blue-shimmer"></div>
       <div className="relative">
         <div className="relative" style={{ width: "100%", height: "202.2px" }}>
           <iframe
@@ -108,11 +106,13 @@ export function WorkshopCard({
               >
                 <Button
                   variant="customColor"
-                  size="sm"
-                  className="ml-auto mr-1 bg-blue-gl hover:bg-blue-gl-hover text-white transition-colors duration-200"
+                  size="smLong"
+                  className="ml-auto mr-1 bg-blue-gl hover:bg-blue-gl-hover text-white transition-colors duration-200 w-full max-w-[150px] relative group"
                   onClick={handleExploreClick}
-                  >
-                  Explore »
+                >
+                  <span className="absolute inset-0 rounded-md bg-gradient-to-r from-blue-500 to-blue-700 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
+                  <span className="relative z-10">Explore »</span>
+                  <span className="absolute inset-0 rounded-md border-2 border-transparent group-hover:border-blue-700 animate-shimmer"></span>
                 </Button>
               </Link>
             </div>
