@@ -87,7 +87,8 @@ export function WorkshopCard({
             loading="lazy"
             title={`${theme} Workshop Video`}
           />
-          <div className="absolute bottom-0 flex items-center w-full h-10 bg-black bg-opacity-50 px-4">
+          <div className="absolute bottom-0 flex flex-col items-start w-full h-10 bg-black bg-opacity-80 px-4">
+            <h4 className="text-amber-400 text-xs font-bold truncate">Workshop theme</h4>
             <h3 className="text-white text-lg font-bold truncate">{theme}</h3>
           </div>
         </div>
@@ -95,7 +96,7 @@ export function WorkshopCard({
         <div className="p-1 pl-3">
           <div className="flex items-center text-base font-bold justify-between">
             <div className="inline-flex items-center">
-              <CalendarDays className="w-4 h-4 text-blue-500" />
+              <CalendarDays className="w-4 h-4 text-blue-gl" />
               <span className="pl-2 text-gray-700">{formattedDate}</span>
             </div>
             <div className="pt-2">
@@ -118,7 +119,7 @@ export function WorkshopCard({
             </div>
           </div>
 
-          <div className="font-medium text-xs text-gray-600 mb-1">
+          <div className="font-medium text-xs text-blue-gl mb-1">
             {kitName}
           </div>
 
@@ -139,7 +140,7 @@ export function WorkshopCard({
                       height={16}
                       priority={face === "front"}
                     />
-                    <span className="text-xs pl-1">{text}</span>
+                    <span className="text-xs pl-1 text-black">{text}</span>
                   </div>
                 ))}
               </div>
@@ -148,7 +149,7 @@ export function WorkshopCard({
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 text-xs sm:text-sm text-neutral-500">
                 <UsersRound className="w-4 h-4 text-user-pink" />
-                <span>{enrolled} Enrolled</span>
+                <span className="text-black">{enrolled} Enrolled</span>
               </div>
               <div className="flex items-center gap-2 text-sm font-bold">
                 <Tag className="w-4 h-4 text-user-pink -scale-x-100" />
