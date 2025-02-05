@@ -204,8 +204,8 @@ const TicketCardWithActions: React.FC<TicketCardProps> = () => {
                   <div className="text-left w-full px-6 mb-4 flex space-x-4">
                     <p className="text-base font-medium">₹{perChildAmount}</p>
                     {/* Conditionally render payment mode */}
-                    {ticket.paymentMode !== 'Paid' && ( 
-                      <p className="text-base font-medium">{ticket.paymentMode}</p>
+                    {ticket.paymentMode === 'Pay at Centre' && (
+                      <p className="text-base font-medium">Pay at Centre</p>
                     )}
                   </div>
 

@@ -44,24 +44,13 @@ export default function WorkshopDetails({
   };
 
   const handleShare = async () => {
-    const shareData: ShareData & { files?: File[] } = {
+    const shareData = {
       title,
-      text: `Check out the workshop "${title}" happening on ${date_of_workshop}!`,
+      text: `Check out the workshop "${title}" happening on ${formatDate(date_of_workshop)} in ${location.city}!`,
       url: window.location.href,
     };
 
     try {
-      const response = await fetch(shareImage);
-      if (!response.ok) {
-        throw new Error("Failed to load the share image.");
-      }
-      const blob = await response.blob();
-      const file = new File([blob], "share-image.jpg", { type: "image/jpeg" });
-
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        shareData.files = [file];
-      }
-
       if (navigator.share) {
         await navigator.share(shareData);
       } else {

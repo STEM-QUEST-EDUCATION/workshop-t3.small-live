@@ -25,13 +25,10 @@ export function useTicketData() {
 
   useEffect(() => {
     async function fetchTicketData() {
-      // Check multiple sources for transaction ID
       const urlParams = new URLSearchParams(window.location.search);
       const txnIdFromUrl = urlParams.get("txnId");
-      const transactionId =
-        contextTransactionId ||
-        txnIdFromUrl ||
-        localStorage.getItem("transactionId");
+      const paymentType = urlParams.get("type"); // Get payment type from URL
+      const transactionId = contextTransactionId || txnIdFromUrl || localStorage.getItem("transactionId");
 
       console.log("Transaction ID sources:", {
         context: contextTransactionId,
@@ -59,7 +56,9 @@ export function useTicketData() {
           const updatedData = data.map((ticket) => ({
             ...ticket,
             location: workshopDetails.location || ticket.location,
-            date: workshopDetails.date ,
+            date: workshopDetails.date,
+            // Set payment mode based on payment type
+            paymentMode: paymentType === 'offline' ? 'Pay at Centre' : 'Paid'
           }));
           setTicketData(updatedData);
         } else if (data.error) {
@@ -78,7 +77,7 @@ export function useTicketData() {
     console.log("DATA - ", workshopDetails)
 
     fetchTicketData();
-  }, [contextTransactionId, workshopDetails.location]);
+  }, [contextTransactionId, workshopDetails.location, workshopDetails.date]);
 
   return { ticketData, isLoading, error };
 }

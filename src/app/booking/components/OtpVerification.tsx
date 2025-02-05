@@ -100,7 +100,7 @@ export default function OtpVerification({ handleBack, setOtp }: OtpVerificationP
         const data = await response.json();
         console.log("OTP validated successfully:", data.message);
         setIsVerified(true); // Set verification status
-        alert("OTP verified successfully!");
+        
         handleBack(); // Close the popup after successful verification
       } else {
         const errorData = await response.json();
