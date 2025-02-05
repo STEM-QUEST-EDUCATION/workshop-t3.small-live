@@ -29,8 +29,8 @@ export default function RootLayout({
 }
 
 export const metadata: Metadata = {
-  title: "WorkShops",
-  description: "Best Lego-In-Action Robotics and Coding Workshops to boost your child's logical and critical thinking and prepare them for next-gen skills",
+  title: "Lego-In-Action Robotics and AI Workshops",
+  description: "Best Lego-In-Action Robotics and AI Workshops to boost your child's logical and critical thinking and prepare them for next-gen skills",
 };
 
 
