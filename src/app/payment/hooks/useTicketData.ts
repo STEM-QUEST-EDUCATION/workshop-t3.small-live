@@ -77,7 +77,7 @@ export function useTicketData() {
     console.log("DATA - ", workshopDetails)
 
     fetchTicketData();
-  }, [contextTransactionId, workshopDetails.location, workshopDetails.date]);
+  }, [contextTransactionId, workshopDetails]);
 
   return { ticketData, isLoading, error };
 }

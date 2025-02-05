@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import Loading from "./components/Loading";
 import { WorkshopDocument } from "@/models/Workshop";
 import { useBooking } from "@/contexts/BookingContext";
-import { format, isSameDay, parseISO, isAfter, startOfDay } from "date-fns";
+import { isSameDay, parseISO, isAfter, startOfDay } from "date-fns";
 import BookingClosedMessage from "./components/BookingClosedMessage";
 
 // Dynamic imports with loading fallbacks

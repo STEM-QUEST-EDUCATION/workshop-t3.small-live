@@ -73,8 +73,8 @@ export default function Page() {
       }
       const data = await response.json();
       setWorkshops(data.data);
-    } catch (error) {
-      // console.error("Error fetching workshops:", error);
+    } catch  {
+      console.error("Error fetching workshops:");
     } finally {
       setIsLoading(false);
     }
