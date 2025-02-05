@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import Loading from "./components/Loading";
 import { WorkshopDocument } from "@/models/Workshop";
 import { useBooking } from "@/contexts/BookingContext";
-import { format, isSameDay, parseISO, isAfter, startOfDay } from "date-fns";
+import { isSameDay, parseISO, isAfter, startOfDay } from "date-fns";
 import BookingClosedMessage from "./components/BookingClosedMessage";
 
 // Dynamic imports with loading fallbacks
@@ -201,7 +201,7 @@ export default function Page() {
           <div className="absolute inset-0 w-full h-full">
             <iframe
               className="absolute top-0 left-0 w-full h-full"
-              src="https://www.youtube-nocookie.com/embed/5blxdvK5vjU?autoplay=1&loop=1&playlist=5blxdvK5vjU&controls=0&mute=1&enablejsapi=0&modestbranding=1&rel=0"
+              src="https://www.youtube-nocookie.com/embed/5blxdvK5vjU?autoplay=1&loop=1&playlist=5blxdvK5vjU&controls=0&mute=1&enablejsapi=0&modestbranding=1&rel=0&playsinline=1&speed=0.25"
               title="Workshop Video"
               frameBorder="0"
               allow="autoplay; encrypted-media"
