@@ -5,8 +5,6 @@ import { X, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useBooking } from "@/contexts/BookingContext"; // Import the BookingContext
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 interface OtpVerificationProps {
   handleBack: () => void;
@@ -73,10 +71,10 @@ export default function OtpVerification({ handleBack, setOtp }: OtpVerificationP
       }
 
       // Show success message
-      toast.success("New OTP has been sent to your phone number");
+      alert("New OTP has been sent to your phone number");
     } catch (error) {
       console.error("Error resending OTP:", error);
-      toast.error("Failed to resend OTP. Please try again.");
+      alert("Failed to resend OTP. Please try again.");
     }
   };
 
@@ -84,7 +82,7 @@ export default function OtpVerification({ handleBack, setOtp }: OtpVerificationP
     if (isVerified) {
       handleBack();
     } else {
-      toast.warn("Please verify your OTP before closing");
+      alert("Please verify your OTP before closing");
     }
   };
 
@@ -100,88 +98,85 @@ export default function OtpVerification({ handleBack, setOtp }: OtpVerificationP
   
       if (response.ok) {
         const data = await response.json();
-        
         console.log("OTP validated successfully:", data.message);
         setIsVerified(true); // Set verification status
-        toast.success("OTP verified successfully!");
+        alert("OTP verified successfully!");
+        handleBack(); // Close the popup after successful verification
       } else {
         const errorData = await response.json();
         console.error("Failed to validate OTP:", errorData.error);
-        toast.error(`Error: ${errorData.error}`);
+        alert(`Error: ${errorData.error}`);
       }
     } catch (error) {
       console.error("Error during OTP validation:", error);
-      toast.error("An error occurred while validating OTP. Please try again.");
+      alert("An error occurred while validating OTP. Please try again.");
     }
   };
 
   return (
-    <>
-      <ToastContainer />
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm z-50">
-        <div className="bg-white rounded-lg p-4 w-[calc(100%-1rem)] max-w-md shadow-lg relative">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="absolute right-2 top-0" 
-            onClick={handleClose}  // Changed from handleBack to handleClose
-          >
-            <X className="h-6 w-6" />
-          </Button>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm z-50">
+      <div className="bg-white rounded-lg p-4 w-[calc(100%-1rem)] max-w-md shadow-lg relative">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="absolute right-2 top-0" 
+          onClick={handleClose}  // Changed from handleBack to handleClose
+        >
+          <X className="h-6 w-6" />
+        </Button>
 
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Lock className="h-6 w-6 text-pink-500" />
-                <h2 className="text-lg font-semibold">Verify OTP sent to your number</h2>
-              </div>
-              <p className="text-gray-600">
-                We have sent a 6-digit OTP to your phone number for verification.
-              </p>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Lock className="h-6 w-6 text-pink-500" />
+              <h2 className="text-lg font-semibold">Verify OTP sent to your number</h2>
             </div>
+            <p className="text-gray-600">
+              We have sent a 6-digit OTP to your phone number for verification.
+            </p>
+          </div>
 
-            <div className="flex justify-center gap-2 ">
-              {otp.map((digit, index) => (
-                <Input
-                  key={index}
-                  type="text"
-                  value={digit}
-                  onChange={(e) => handleInputChange(index, e.target.value)}
-                  onKeyDown={(e) => handleKeyDown(index, e)}
-                  ref={(el) => {
-                    inputRefs.current[index] = el; // Assign the ref
-                  }}
-                  className="w-10 h-10 md:w-12 md:h-12 text-center text-base  font-semibold bg-gray-50"
-                  maxLength={1}
-                />
-              ))}
-            </div>
+          <div className="flex justify-center gap-2 ">
+            {otp.map((digit, index) => (
+              <Input
+                key={index}
+                type="text"
+                value={digit}
+                onChange={(e) => handleInputChange(index, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(index, e)}
+                ref={(el) => {
+                  inputRefs.current[index] = el; // Assign the ref
+                }}
+                className="w-10 h-10 md:w-12 md:h-12 text-center text-base  font-semibold bg-gray-50"
+                maxLength={1}
+              />
+            ))}
+          </div>
 
-            <div className="text-center text-2xl font-semibold">
-              {formatTime(timeLeft)}
-            </div>
+          <div className="text-center text-2xl font-semibold">
+            {formatTime(timeLeft)}
+          </div>
 
-            <div className="text-center">
-              <span className="text-gray-600">Didn&#39;t receive the code? </span>
-              <Button
-                variant="link"
-                onClick={handleResend}
-                className="text-[#00A0E4] p-0 h-auto font-normal"
-                disabled={timeLeft > 0}
-              >
-                Resend
-              </Button>
-            </div>
+          <div className="text-center">
+            <span className="text-gray-600">Didn&#39;t receive the code? </span>
             <Button
-              className="w-full bg-[#00A0E4] text-white hover:bg-[#0090D4] mt-4"
-              disabled={otp.some((digit) => digit === "")}
-              onClick={handleVerify}
+              variant="link"
+              onClick={handleResend}
+              className="text-[#00A0E4] p-0 h-auto font-normal"
+              disabled={timeLeft > 0}
             >
-              Verify
+              Resend
             </Button>
           </div>
+          <Button
+            className="w-full bg-[#00A0E4] text-white hover:bg-[#0090D4] mt-4"
+            disabled={otp.some((digit) => digit === "")}
+            onClick={handleVerify}
+          >
+            Verify
+          </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
