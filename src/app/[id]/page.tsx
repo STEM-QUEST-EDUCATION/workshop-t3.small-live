@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import Loading from "./components/Loading";
 import { WorkshopDocument } from "@/models/Workshop";
 import { useBooking } from "@/contexts/BookingContext";
+import { format, isSameDay, parseISO, isAfter, startOfDay } from "date-fns";
+import BookingClosedMessage from "./components/BookingClosedMessage";
 
 // Dynamic imports with loading fallbacks
 const BackButton = dynamic(() => import("./components/BackButton"), {
@@ -37,6 +39,16 @@ const WorkshopPage = dynamic(() => import("./components/WorkshopDetails"), {
   ssr: false,
 });
 
+const WorkshopDetailsSection = dynamic(
+  () => import("./components/WorkshopDetailsSection"),
+  {
+    loading: () => (
+      <div className="h-40 w-full animate-pulse bg-gray-200 rounded" />
+    ),
+    ssr: false,
+  }
+);
+
 const Testimonials = dynamic(() => import("./components/feedbackCarousel"), {
   loading: () => (
     <div className="h-40 w-full animate-pulse bg-gray-200 rounded" />
@@ -57,16 +69,6 @@ const LocationCard = dynamic(() => import("./components/LocationCard"), {
   ),
   ssr: false,
 });
-
-const WorkshopDetailsSection = dynamic(
-  () => import("./components/WorkshopDetailsSection"),
-  {
-    loading: () => (
-      <div className="h-40 w-full animate-pulse bg-gray-200 rounded" />
-    ),
-    ssr: false,
-  }
-);
 
 const skills = [
   "Creativity",
@@ -104,6 +106,14 @@ export default function Page() {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showClosedMessage, setShowClosedMessage] = useState(false);
+
+  const isBookingClosed = workshopData
+    ? isSameDay(parseISO(workshopData.date_of_workshop), new Date())
+    : false;
+
+  console.log("Workshop Date:", workshopData?.date_of_workshop);
+  console.log("Is Booking Closed:", isBookingClosed);
 
   useEffect(() => {
     const fetchWorkshopData = async () => {
@@ -111,16 +121,8 @@ export default function Page() {
       try {
         setIsLoading(true);
         setError(null);
-        const response = await fetch(`/api/workshop/${workshopId}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch workshop details");
-        }
+        const response = await fetch(`/api/workshop/${workshopId}`);
+        if (!response.ok) throw new Error("Failed to fetch workshop details");
 
         const data: WorkshopDocument = await response.json();
         setWorkshopData(data);
@@ -147,6 +149,24 @@ export default function Page() {
       return;
     }
 
+    const workshopDate = parseISO(workshopData.date_of_workshop);
+    const currentDate = new Date();
+    const isWorkshopToday = isSameDay(workshopDate, currentDate);
+    const hasWorkshopPassed = isAfter(
+      startOfDay(currentDate),
+      startOfDay(workshopDate)
+    );
+
+    console.log("Workshop Date:", workshopDate);
+    console.log("Current Date:", currentDate);
+    console.log("Is Workshop Today:", isWorkshopToday);
+    console.log("Has Workshop Passed:", hasWorkshopPassed);
+
+    if (hasWorkshopPassed || isWorkshopToday) {
+      setShowClosedMessage(true);
+      return;
+    }
+
     try {
       const workshopDetails = {
         id: workshopData._id.toString(),
@@ -156,15 +176,6 @@ export default function Page() {
         location: `${workshopData.location.address}, ${workshopData.location.city}`,
         price: workshopData.rate,
       };
-
-      console.log("Logging individual fields in workshopDetails:");
-      console.log("ID:", workshopDetails.id);
-      console.log("Name:", workshopDetails.name);
-      console.log("Date:", workshopDetails.date);
-      console.log("Time:", workshopDetails.time);
-      console.log("Location:", workshopDetails.location);
-      console.log("Price:", workshopDetails.price);
-
       setWorkshopDetails(workshopDetails);
       router.push("/booking");
     } catch (error) {
@@ -173,41 +184,13 @@ export default function Page() {
     }
   };
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
-  if (error) {
+  if (isLoading) return <Loading />;
+  if (error) return <BookingClosedMessage message={error} />;
+  if (!workshopData)
+    return <BookingClosedMessage message="Workshop not found" />;
+  if (showClosedMessage) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center">
-        <h2 className="text-xl font-semibold text-red-600 mb-4">Error</h2>
-        <p className="text-gray-700 mb-4">{error}</p>
-        <Button
-          onClick={() => router.push("/")}
-          className="bg-blue-500 text-white"
-        >
-          Go Back Home
-        </Button>
-      </div>
-    );
-  }
-
-  if (!workshopData) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          Workshop Not Found
-        </h2>
-        <p className="text-gray-700 mb-4">
-          The workshop you&apos;re looking for doesn&apos;t exist.
-        </p>
-        <Button
-          onClick={() => router.push("/")}
-          className="bg-blue-500 text-white"
-        >
-          Go Back Home
-        </Button>
-      </div>
+      <BookingClosedMessage message="Same day bookings are not available. Please contact us at 9468074074 for assistance." />
     );
   }
 
@@ -223,11 +206,8 @@ export default function Page() {
               frameBorder="0"
               allow="autoplay; encrypted-media"
               allowFullScreen
-              style={{
-                transform: "scale(1.05)",
-                transformOrigin: "center",
-              }}
-            ></iframe>
+              style={{ transform: "scale(1.05)", transformOrigin: "center" }}
+            />
           </div>
           <BackButton />
           <div className="absolute bottom-7 left-0 right-0 transform translate-y-[10%] px-4">
@@ -270,15 +250,13 @@ export default function Page() {
           </main>
 
           <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t mx-auto max-w-md">
-            <div className="flex gap-3">
-              <Button
-                className="w-full bg-[#09A5E8] text-white hover:bg-[#0787be]"
-                onClick={handleBookNow}
-                disabled={!selectedTime}
-              >
-                Book Now
-              </Button>
-            </div>
+            <Button
+              className="w-full bg-[#09A5E8] text-white hover:bg-[#0787be]"
+              onClick={handleBookNow}
+              disabled={!selectedTime}
+            >
+              Book Now
+            </Button>
           </div>
         </div>
       </main>

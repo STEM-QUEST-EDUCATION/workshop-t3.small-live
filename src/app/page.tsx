@@ -20,7 +20,7 @@ interface Workshop {
   rate: number;
   video_url: string;
   description: string;
-  location: string;
+  // location: string;
   likes: number;
   rating: number;
   children_enrolled: number;
@@ -74,7 +74,7 @@ export default function Page() {
       const data = await response.json();
       setWorkshops(data.data);
     } catch (error) {
-      console.error("Error fetching workshops:", error);
+      // console.error("Error fetching workshops:", error);
     } finally {
       setIsLoading(false);
     }

@@ -11,7 +11,6 @@ export async function GET(
   try {
     // Connect to the database
     await connectDB();
-    console.log("Api hitting");  // check 2
     // Use the dynamic route parameter from context
     const { id } = await context.params;
 

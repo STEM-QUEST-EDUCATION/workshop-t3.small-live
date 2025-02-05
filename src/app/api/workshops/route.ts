@@ -9,7 +9,6 @@ export const GET = async () => {
 
     // Fetch all workshop details from the collection
     const workshops = await workshop.find();
-    console.log("called workshops/routes.js")
 
     // Return the workshops data
     return NextResponse.json({ success: true, data: workshops });

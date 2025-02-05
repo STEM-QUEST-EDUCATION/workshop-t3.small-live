@@ -12,7 +12,7 @@ node_modules/
 .env
 .env.*.local
 .env.production
-
+.env.local
 
 # Next.js build output
 .next/

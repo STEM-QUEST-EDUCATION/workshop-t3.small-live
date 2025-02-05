@@ -68,7 +68,7 @@ export default function Step3ParentContact({
           className={`bg-white rounded-lg ${errors.phone1 ? "border-red-500" : ""}`}
           type="tel"
         />
-        {errors.phone1 && <p className="text-red-500 text-sm mt-1">{errors.phone1}</p>}
+        {errors.phone1 && <p className="text-red-500 text-sm mt-1">{errors.phone1}:Restart Again</p>}
       </div>
       <div>
         <Input
@@ -78,7 +78,7 @@ export default function Step3ParentContact({
           className={`bg-white rounded-lg ${errors.phone2 ? "border-red-500" : ""}`}
           type="tel"
         />
-        {errors.phone2 && <p className="text-red-500 text-sm mt-1">{errors.phone2}</p>}
+        {errors.phone2 && <p className="text-red-500 text-sm mt-1">{errors.phone2}:Restart Again</p>}
       </div>
     </div>
   );

@@ -28,7 +28,7 @@ const Footer: React.FC = () => {
           onClick={() => handleLinkClick("whatsapp")}
         >
           <Image
-            src="https://dashboard.codeparrot.ai/api/assets/Z02W4bLVBCaRbmab"
+            src="/icons/whatsapp.svg"
             alt="WhatsApp"
             width={16}
             height={16}
@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
           onClick={() => handleLinkClick("instagram")}
         >
           <Image
-            src="https://dashboard.codeparrot.ai/api/assets/Z02W4rLVBCaRbmac"
+            src="/icons/instagram.svg"
             alt="Instagram"
             width={16}
             height={16}
@@ -58,7 +58,7 @@ const Footer: React.FC = () => {
           onClick={() => handleLinkClick("location")}
         >
           <Image
-            src="https://dashboard.codeparrot.ai/api/assets/Z02W4rLVBCaRbmad"
+            src="/icons/location.svg"
             alt="Location"
             width={16}
             height={16}
