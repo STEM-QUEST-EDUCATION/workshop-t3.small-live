@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import React from "react";
 import Image from "next/image";
 import { WorkshopCard } from "@/components/workshop-card";
@@ -95,6 +95,14 @@ export default function Page() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
+  const sortedWorkshops = useMemo(() => {
+    return [...workshops].sort((a, b) => {
+      const dateA = new Date(a.date_of_workshop);
+      const dateB = new Date(b.date_of_workshop);
+      return dateA.getTime() - dateB.getTime();
+    });
+  }, [workshops]);
+
   return (
     <div className="max-w-md mx-auto bg-gray-50 min-h-screen pb-5">
       {/* Header */}
@@ -137,7 +145,7 @@ export default function Page() {
         {isLoading ? (
           <LoadingAnimation />
         ) : (
-          workshops.map((workshop, index) => (
+          sortedWorkshops.map((workshop, index) => (
             <React.Fragment key={workshop._id}>
               <WorkshopCard
                 _id={workshop._id}
