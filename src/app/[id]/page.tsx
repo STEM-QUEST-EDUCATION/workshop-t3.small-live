@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, Suspense, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Loading from "./components/Loading";
@@ -9,6 +9,7 @@ import { WorkshopDocument } from "@/models/Workshop";
 import { useBooking } from "@/contexts/BookingContext";
 import { isSameDay, parseISO, isAfter, startOfDay } from "date-fns";
 import BookingClosedMessage from "./components/BookingClosedMessage";
+import html2canvas from "html2canvas";
 
 // Dynamic imports with loading fallbacks
 const BackButton = dynamic(() => import("./components/BackButton"), {
@@ -107,6 +108,7 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showClosedMessage, setShowClosedMessage] = useState(false);
+  const workshopRef = useRef(null);
 
   const isBookingClosed = workshopData
     ? isSameDay(parseISO(workshopData.date_of_workshop), new Date())
@@ -184,6 +186,33 @@ export default function Page() {
     }
   };
 
+  const handleShare = async () => {
+    if (!workshopRef.current || !workshopData) return;
+
+    try {
+      const canvas = await html2canvas(workshopRef.current);
+      const dataUrl = canvas.toDataURL("image/png");
+
+      const shareData = {
+        title: workshopData.theme,
+        text: `Join now for GeniusLabs workshop!`,
+        url: window.location.href,
+        files: [
+          new File([dataUrl], "workshop.png", { type: "image/png" }),
+        ],
+      };
+
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        alert("Sharing is not supported in your browser.");
+      }
+    } catch (error) {
+      console.error("Error sharing content:", error);
+      alert("Failed to share. Please try again.");
+    }
+  };
+
   if (isLoading) return <Loading />;
   if (error) return <BookingClosedMessage message={error} />;
   if (!workshopData)
@@ -198,6 +227,13 @@ export default function Page() {
     <Suspense fallback={<Loading />}>
       <main className="max-w-md mx-auto bg-gray-50 min-h-screen pb-5">
         <div className="relative h-[50vh] rounded-b-[2rem] overflow-hidden">
+          <Button
+            className="absolute top-4 right-4 z-10"
+            onClick={handleShare}
+            variant="ghost"
+          >
+            Share
+          </Button>
           <div className="absolute inset-0 w-full h-full">
             <iframe
               className="absolute top-0 left-0 w-full h-full"
@@ -212,6 +248,7 @@ export default function Page() {
           <BackButton />
           <div className="absolute bottom-7 left-0 right-0 transform translate-y-[10%] px-4">
             <WorkshopPage
+              ref={workshopRef}
               title={workshopData.theme}
               date_of_workshop={workshopData.date_of_workshop}
               location={workshopData.location}

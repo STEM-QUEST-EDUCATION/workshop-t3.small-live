@@ -5,7 +5,7 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import Image from 'next/image';
 import { useTicketData } from '@/app/payment/hooks/useTicketData';
-
+import { format, isValid } from 'date-fns';
 
 interface TicketCardProps {
   numberOfStudents: number;
@@ -65,7 +65,7 @@ const TicketCardWithActions: React.FC<TicketCardProps> = () => {
       }
     }
 
-    pdf.save('tickets.pdf');
+    pdf.save('GeniusLabs Workshop Ticket.pdf');
   };
 
   const handleSharePDF = async () => {
@@ -74,7 +74,7 @@ const TicketCardWithActions: React.FC<TicketCardProps> = () => {
 
       for (let i = 0; i < ticketData.length; i++) {
         setCurrentIndex(i);
-        await new Promise(resolve => setTimeout(resolve, 300));
+        await new Promise((resolve) => setTimeout(resolve, 300));
 
         if (ticketRef.current) {
           const canvas = await html2canvas(ticketRef.current, {
@@ -95,42 +95,22 @@ const TicketCardWithActions: React.FC<TicketCardProps> = () => {
         }
       }
 
-      // Convert PDF to blob and create URL
       const pdfBlob = pdf.output('blob');
-      const pdfFile = new File([pdfBlob], 'tickets.pdf', { type: 'application/pdf' });
+      const pdfFile = new File([pdfBlob], 'GeniusLabs Workshop Ticket.pdf', { type: 'application/pdf' });
 
-      // Create text message
-      const text = `Here are the tickets for "${currentTicket.workshopTitle}" happening on ${currentTicket.date} at ${currentTicket.location}.`;
-      
-      // Check if Web Share API is supported
-      if (navigator.share && navigator.canShare()) {
-        try {
-          await navigator.share({
-            text: text,
-            files: [pdfFile],
-          });
-          return;
-        } catch {
-          console.log('Fallback to traditional sharing');
-        }
-      }
-
-      // Fallback for devices/browsers that don't support Web Share API
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      
-      // Create a temporary URL for the PDF
-      const pdfUrl = URL.createObjectURL(pdfBlob);
-
-      if (isMobile) {
-        // Mobile WhatsApp sharing
-        window.open(`whatsapp://send?text=${encodeURIComponent(text)}%0A${encodeURIComponent(pdfUrl)}`);
+      if (navigator.share && navigator.canShare({ files: [pdfFile] })) {
+        await navigator.share({
+          files: [pdfFile],
+          title: 'Workshop Tickets',
+          text: `Here is link to the Lego-In-Action workshop I've booked, themed "${currentTicket.workshopTitle}" The plan is set for ${currentTicket.date} at ${currentTicket.location}. See if you can join me`,
+        });
       } else {
-        // Web WhatsApp sharing
-        window.open(`https://web.whatsapp.com/send?text=${encodeURIComponent(text)}%0A${encodeURIComponent(pdfUrl)}`);
-      }
+        const pdfUrl = URL.createObjectURL(pdfBlob);
 
-      // Clean up the URL after sharing
-      setTimeout(() => URL.revokeObjectURL(pdfUrl), 60000); // Clean up after 1 minute
+        window.open(`https://web.whatsapp.com/send?text=${encodeURIComponent(`Here is link to the Lego-In-Action workshop I've booked, themed "${currentTicket.workshopTitle}" The plan is set for ${currentTicket.date} at ${currentTicket.location}. See if you can join me`)}&attachment=${encodeURIComponent(pdfUrl)}`);
+
+        setTimeout(() => URL.revokeObjectURL(pdfUrl), 60000);
+      }
     } catch (error) {
       console.error('Error while sharing PDF:', error);
       alert('An error occurred while sharing the PDF.');
@@ -192,7 +172,9 @@ const TicketCardWithActions: React.FC<TicketCardProps> = () => {
 
                     <div className="flex items-center mb-3">
                       <Image src="/ticket/date.svg" width={20} height={20} alt="date" className="w-4 h-4 mr-2" />
-                      <span className="text-xs font-semibold">{ticket.date}</span>
+                      <span className="text-xs font-semibold">
+                        {isValid(new Date(ticket.date)) ? format(new Date(ticket.date), 'dd MMM yyyy') : ticket.date}
+                      </span>
                     </div>
 
                     <div className="flex items-center">
@@ -246,7 +228,6 @@ const TicketCardWithActions: React.FC<TicketCardProps> = () => {
           </span>
           <FaWhatsapp className="text-white" />
         </button>
-
       </div>
     </div>
   );
