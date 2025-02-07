@@ -9,6 +9,23 @@ import Image from "next/image";
 import { UsersRound, CalendarDays, Tag } from "lucide-react";
 import { logEvent, analytics } from "@/lib/firebaseConfig";
 
+// Add these type definitions at the top of the file
+declare global {
+  interface Window {
+    fbq: (
+      type: string,
+      eventName: string,
+      params?: {
+        content_ids?: string[];
+        content_name?: string;
+        content_type?: string;
+        value?: number;
+        currency?: string;
+      }
+    ) => void;
+  }
+}
+
 interface WorkshopCardProps {
   _id: string;
   date: string;
@@ -56,21 +73,32 @@ export function WorkshopCard({
   const handleExploreClick = useCallback(
     async (e: React.MouseEvent) => {
       e.preventDefault();
-      console.log("Explore button clicked for workshop ID:", _id); // Add this line
+      console.log("Explore button clicked for workshop ID:", _id);
 
       // Log the click event to Firebase Analytics if analytics is supported
       if (analytics) {
         logEvent(analytics, "explore_button_click", { workshop_id: _id });
       }
 
+      // Track Meta Pixel event
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'ViewContent', {
+          content_ids: [_id],
+          content_name: theme,
+          content_type: 'workshop',
+          value: price,
+          currency: 'INR'
+        });
+      }
+
       try {
         router.push(`/${_id}`);
-        console.log("Navigating to:", `/${_id}`); // Add this line
+        console.log("Navigating to:", `/${_id}`);
       } catch (error) {
         console.error("Navigation error:", error);
       }
     },
-    [router, _id]
+    [router, _id, theme, price]
   );
 
   return (

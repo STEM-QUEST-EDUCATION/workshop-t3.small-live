@@ -10,6 +10,8 @@ import { useBooking } from "@/contexts/BookingContext";
 import { isSameDay, parseISO, isAfter, startOfDay } from "date-fns";
 import BookingClosedMessage from "./components/BookingClosedMessage";
 import html2canvas from "html2canvas";
+import { logEvent } from "@/lib/firebaseConfig";
+import { analytics } from "@/lib/firebaseConfig";
 
 // Dynamic imports with loading fallbacks
 const BackButton = dynamic(() => import("./components/BackButton"), {
@@ -170,6 +172,17 @@ export default function Page() {
     }
 
     try {
+      // Track the book now click event
+      if (analytics) {
+        logEvent(analytics, `book_now_${workshopData.theme.toLowerCase().replace(/\s+/g, '_')}`, {
+          workshop_id: workshopData._id.toString(),
+          workshop_name: workshopData.theme,
+          workshop_date: workshopData.date_of_workshop,
+          selected_time: selectedTime,
+          price: workshopData.rate
+        });
+      }
+
       const workshopDetails = {
         id: workshopData._id.toString(),
         name: workshopData.theme,
