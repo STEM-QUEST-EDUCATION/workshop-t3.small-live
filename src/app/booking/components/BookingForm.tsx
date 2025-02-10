@@ -40,8 +40,9 @@ interface BookingFormProps {
   phoneErrors: PhoneErrors;
   setPhoneErrors: Dispatch<SetStateAction<PhoneErrors>>;
   showOtpPopup: boolean;
-  onCloseOtpPopup: () => void;
+  closePopup: () => void; // Rename prop to closePopup
   handleSendOTP: () => void;
+  onOtpVerified: () => void; // Add this prop
 }
 
 export function BookingForm({
@@ -59,7 +60,8 @@ export function BookingForm({
   phoneErrors,
   setPhoneErrors,
   showOtpPopup,
-  onCloseOtpPopup,
+  closePopup, // Rename prop to closePopup
+  onOtpVerified, // Add this prop
 }: BookingFormProps) {
   const handleAddStudent = () => {
     if (students.length < 4) {
@@ -153,7 +155,11 @@ export function BookingForm({
       )}
 
       {showOtpPopup && (
-        <OtpVerification handleBack={onCloseOtpPopup} setOtp={() => {}} />
+        <OtpVerification
+          closePopup={closePopup} // Rename prop to closePopup
+          setOtp={() => {}}
+          onOtpVerified={onOtpVerified} // Add this prop
+        />
       )}
     </div>
   );

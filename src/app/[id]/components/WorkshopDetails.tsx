@@ -88,9 +88,9 @@ const WorkshopDetails = forwardRef<HTMLDivElement, WorkshopDetailsProps>(
             <p className="text-xs text-gray-500 custom-font">
               {formatDate(date_of_workshop)}
             </p>
-            <div className="flex gap-1">
+            <div className="flex gap-2">
               <button className="text-gray-500" onClick={handleShare}>
-                <Share2 size={18} />
+                <Share2 size={22} />
               </button>
 
               <button
@@ -100,7 +100,7 @@ const WorkshopDetails = forwardRef<HTMLDivElement, WorkshopDetailsProps>(
                 onClick={toggleHeart}
               >
                 <Heart
-                  size={18}
+                  size={22}
                   className={`${isHeartClicked ? "fill-red-500" : ""}`}
                 />
               </button>

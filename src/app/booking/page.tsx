@@ -347,8 +347,13 @@ export default function HomePage() {
 
   const handleCloseOtpPopup = useCallback(() => {
     setShowOtpPopup(false);
-    setStep(4);
+    
   }, []);
+
+  // HomePage.tsx
+const handleOtpVerified = useCallback(() => {
+  setStep(4);
+}, []);
 
   const isNextDisabled = useCallback(() => {
     if (step === 1) return studentCount === "";
@@ -475,8 +480,10 @@ export default function HomePage() {
           phoneErrors={phoneErrors}
           setPhoneErrors={setPhoneErrors}
           showOtpPopup={showOtpPopup}
-          onCloseOtpPopup={handleCloseOtpPopup}
+          closePopup={handleCloseOtpPopup}
           handleSendOTP={handleSendOTP}
+          onOtpVerified={handleOtpVerified}
+
         />
       </main>
 

@@ -7,15 +7,15 @@ import { Input } from "@/components/ui/input";
 import { useBooking } from "@/contexts/BookingContext"; // Import the BookingContext
 
 interface OtpVerificationProps {
-  handleBack: () => void;
+  closePopup: () => void; // Rename onClose to closePopup
   setOtp: Dispatch<SetStateAction<string[]>>;
+  onOtpVerified: () => void; // Add this prop
 }
 
-export default function OtpVerification({ handleBack, setOtp }: OtpVerificationProps) {
+export default function OtpVerification({ closePopup, setOtp, onOtpVerified }: OtpVerificationProps) {
   const { parentPhone } = useBooking(); // Access the parent's phone number
   const [otp, _setOtp] = useState<string[]>(Array(6).fill(""));
   const [timeLeft, setTimeLeft] = useState(60); // 60 seconds
-  const [isVerified, setIsVerified] = useState(false); // Add this state
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
@@ -79,11 +79,8 @@ export default function OtpVerification({ handleBack, setOtp }: OtpVerificationP
   };
 
   const handleClose = () => {
-    if (isVerified) {
-      handleBack();
-    } else {
-      alert("Please verify your OTP before closing");
-    }
+    setOtp(Array(6).fill("")); // Clear the OTP fields
+    closePopup(); // Use closePopup instead of handleBack
   };
 
   const handleVerify = async () => {
@@ -99,9 +96,9 @@ export default function OtpVerification({ handleBack, setOtp }: OtpVerificationP
       if (response.ok) {
         const data = await response.json();
         console.log("OTP validated successfully:", data.message);
-        setIsVerified(true); // Set verification status
         
-        handleBack(); // Close the popup after successful verification
+        onOtpVerified(); // Call the onOtpVerified function
+        closePopup(); // Close the popup after successful verification
       } else {
         const errorData = await response.json();
         console.error("Failed to validate OTP:", errorData.error);
@@ -141,6 +138,7 @@ export default function OtpVerification({ handleBack, setOtp }: OtpVerificationP
               <Input
                 key={index}
                 type="text"
+                inputMode="numeric"
                 value={digit}
                 onChange={(e) => handleInputChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
