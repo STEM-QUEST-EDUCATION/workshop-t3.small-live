@@ -71,7 +71,7 @@ export default function OtpVerification({ closePopup, setOtp, onOtpVerified }: O
       }
 
       // Show success message
-      alert("New OTP has been sent to your phone number");
+      alert("OTP has been re-sent to your phone number");
     } catch (error) {
       console.error("Error resending OTP:", error);
       alert("Failed to resend OTP. Please try again.");

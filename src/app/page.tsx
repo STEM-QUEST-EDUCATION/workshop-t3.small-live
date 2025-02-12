@@ -11,6 +11,7 @@ import LoadingAnimation from "@/components/ui/loading-animation";
 // import { analytics } from "@/lib/firebaseConfig";
 // import { logEvent } from "firebase/analytics";
 import "@/styles/fonts";
+import Footerpage from "@/components/ui/Footerpage";
 
 interface Workshop {
   _id: string; // Unique identifier for the workshop
@@ -167,6 +168,7 @@ export default function Page() {
           ))
         )}
       </div>
+      <Footerpage />
 
       {/* Footer */}
       <div

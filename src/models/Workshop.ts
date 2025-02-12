@@ -38,6 +38,7 @@ export interface WorkshopDocument extends Document {
   rating: number;
   children_enrolled: number;
   kit_name: string;
+  meta: string;
 }
 
 const WorkshopSchema = new Schema<WorkshopDocument>({
@@ -65,6 +66,7 @@ const WorkshopSchema = new Schema<WorkshopDocument>({
   rating: { type: Number, required: true },
   children_enrolled: { type: Number, required: true },
   kit_name: { type: String, required: true },
+  meta: { type: String, required: true },
 });
 
 export const workshop =
