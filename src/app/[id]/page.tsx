@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   }
 
   return {
-    title: `Book ${workshopData.theme} Workshop`,
+    title: ` ${workshopData.theme} Workshop`,
     description: workshopData.meta,
     keywords: ['workshop', 'learning', workshopData.theme],
     authors: [{ name: 'Genius Labs' }],
@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     },
     twitter: {
       card: 'summary_large_image',
-      title: `Book ${workshopData.theme}`,
+      title: `${workshopData.theme}`,
       description: workshopData.meta,
       images: [{
         url: metaImageUrl,

@@ -197,12 +197,12 @@ export default function HomePage() {
     }
 
     try {
+      // First save the payment info to get a transaction ID
       const childDetails = bookingData.children.map((child) => ({
         childname: child.name,
         age: parseInt(child.age, 10),
       }));
 
-      
       const totalCost = workshopDetails.price * bookingData.children.length;
 
       const paymentData = {
@@ -212,7 +212,7 @@ export default function HomePage() {
         orderTotal: totalCost,
         product_info: workshopDetails.name,
         time: workshopDetails.time,
-        paymentType: paymentType // Add payment type to identify offline/online
+        paymentType: paymentType
       };
 
       // Save initial payment information
@@ -223,60 +223,48 @@ export default function HomePage() {
       });
 
       if (!savePaymentResponse.ok) {
-        throw new Error("Failed to save payment information. Please try again.");
+        throw new Error("Failed to save payment information");
       }
 
       const savePaymentResult = await savePaymentResponse.json();
       const savedTransactionId = savePaymentResult.paymentId;
+      
+      // Store the transaction ID
       setTransactionId(savedTransactionId);
 
-      // If it's offline payment, update the booking with offline details
-      if (paymentType === 'later') {
-        const offlineUpdateResponse = await fetch("/api/save-offline-booking", {
-          method: "PUT", // Using PUT to update existing booking
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            transactionId: savedTransactionId,
-            workshopDetails,
-            bookingData,
-            parentPhone: parentContact.phone1,
-            orderTotal: totalCost,
-          }),
-        });
-
-        if (!offlineUpdateResponse.ok) {
-          throw new Error("Failed to update offline booking details.");
-        }
-
-        const offlineResult = await offlineUpdateResponse.json();
-        localStorage.setItem('receiptNumber', offlineResult.receiptNumber);
-      }
-
-      // Send OTP
+      // Now send the OTP with the transaction ID
       const response = await fetch("/api/send-sms", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           mobileNumber: parentContact.phone1,
-          name: "Parent",
+          name: bookingData.parent?.name || "Parent",
+          transactionId: savedTransactionId // Include the transaction ID
         }),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to send OTP. Please try again.");
+        const error = await response.json();
+        throw new Error(error.error || "Failed to send OTP");
       }
 
       setShowOtpPopup(true);
     } catch (error) {
+      console.error("Error in handleSendOTP:", error);
       setPhoneErrors((prev) => ({
         ...prev,
-        phone1:
-          error instanceof Error
-            ? error.message || "Failed to send OTP"
-            : "An unexpected error occurred",
+        phone1: error instanceof Error ? error.message : "Failed to send OTP",
       }));
     }
-  }, [parentContact.phone1, bookingData, workshopDetails, paymentType, setTransactionId]);
+  }, [
+    parentContact.phone1,
+    bookingData,
+    workshopDetails,
+    paymentType,
+    setTransactionId,
+    setShowOtpPopup,
+    setPhoneErrors
+  ]);
 
   const updateStudents = useCallback((count: number) => {
     setStudents((prevStudents) => {
@@ -381,12 +369,17 @@ const handleOtpVerified = useCallback(() => {
     console.log("Generate ticket");
     
     try {
+      if (!transactionId) {
+        throw new Error("Transaction ID is missing");
+      }
+
       const response = await fetch("/api/save-offline-booking", {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          transactionId,
           workshopDetails,
           bookingData,
           parentPhone,
@@ -395,14 +388,12 @@ const handleOtpVerified = useCallback(() => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to save offline booking");
+        throw new Error("Failed to update offline booking");
       }
 
       const data = await response.json();
       if (data.success) {
-        // First update the context and localStorage
         await Promise.all([
-          setTransactionId(data.transactionId),
           setBookingData(prev => ({
             ...prev,
             payment: {
@@ -414,23 +405,18 @@ const handleOtpVerified = useCallback(() => {
           }))
         ]);
 
-        // Store in localStorage
-        localStorage.setItem('transactionId', data.transactionId);
         localStorage.setItem('receiptNumber', data.receiptNumber);
 
-        // Add a small delay to ensure state updates are processed
         await new Promise(resolve => setTimeout(resolve, 200));
-
-        // Then redirect with the transaction ID as a query parameter
-        router.push(`/payment?status=success&type=offline&txnId=${data.transactionId}`);
+        router.push(`/payment?status=success&type=offline&txnId=${transactionId}`);
       } else {
-        throw new Error(data.error || "Failed to save offline booking");
+        throw new Error(data.error || "Failed to update offline booking");
       }
     } catch (error) {
       console.error("Error generating ticket:", error);
       alert("Failed to generate ticket. Please try again.");
     }
-  }, [workshopDetails, bookingData, parentPhone, orderTotal, router, setTransactionId, setBookingData]);
+  }, [workshopDetails, bookingData, parentPhone, orderTotal, router, setBookingData, transactionId]);
 
   return (
     <div className="max-w-md mx-auto bg-gray-50 min-h-screen pb-5">

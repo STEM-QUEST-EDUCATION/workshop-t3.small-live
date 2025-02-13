@@ -20,7 +20,9 @@ import BookingClosedMessage from "./components/BookingClosedMessage";
 
 // Dynamic imports with loading fallbacks
 const BackButtonDynamic = dynamic(() => import("./components/BackButton"), {
-  loading: () => <div className="h-10 w-10 animate-pulse bg-gray-200 rounded" />,
+  loading: () => (
+    <div className="h-10 w-10 animate-pulse bg-gray-200 rounded" />
+  ),
   ssr: false,
 });
 
@@ -62,7 +64,11 @@ export default function ClientWorkshopDetails({
       const now = new Date();
       const allSlotsInPast = slots.every((slot) => {
         const [startTime] = slot.split(" - ");
-        const slotDate = parse(`${initialData.date_of_workshop} ${startTime}`, "yyyy-MM-dd hh:mm a", new Date());
+        const slotDate = parse(
+          `${initialData.date_of_workshop} ${startTime}`,
+          "yyyy-MM-dd hh:mm a",
+          new Date()
+        );
         return slotDate < now;
       });
 
@@ -133,8 +139,7 @@ export default function ClientWorkshopDetails({
           <div className="absolute inset-0 w-full h-full">
             <iframe
               className="absolute top-0 left-0 w-full h-full"
-              src="https://www.youtube-nocookie.com/embed/5blxdvK5vjU?autoplay=1&loop=1&playlist=5blxdvK5vjU&controls=0&mute=1&enablejsapi=0&modestbranding=1&rel=0&playsinline=1&speed=0.25"
-              title="Workshop Video"
+              src={workshopData.workshop_url}
               allow="autoplay; encrypted-media"
               loading="lazy"
               style={{ transform: "scale(1.1)", transformOrigin: "center" }}

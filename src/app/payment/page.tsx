@@ -20,7 +20,7 @@ function PaymentStatus() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="max-w-md w-full space-y-8 bg-white p-6 rounded-lg shadow-lg">
+      <div className="max-w-md w-full space-y-8 bg-white rounded-lg shadow-lg">
         {status === "success" ? (
           <PaymentSuccess />
         ) : (

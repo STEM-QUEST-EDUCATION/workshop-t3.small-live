@@ -13,7 +13,7 @@ interface OtpVerificationProps {
 }
 
 export default function OtpVerification({ closePopup, setOtp, onOtpVerified }: OtpVerificationProps) {
-  const { parentPhone } = useBooking(); // Access the parent's phone number
+  const { parentPhone, transactionId } = useBooking(); // Access the parent's phone number and transaction ID
   const [otp, _setOtp] = useState<string[]>(Array(6).fill(""));
   const [timeLeft, setTimeLeft] = useState(60); // 60 seconds
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -53,16 +53,18 @@ export default function OtpVerification({ closePopup, setOtp, onOtpVerified }: O
 
   const handleResend = async () => {
     try {
-      // Reset OTP fields and timer
       _setOtp(Array(6).fill(""));
       setOtp(Array(6).fill(""));
       setTimeLeft(60);
       
-      // Call the send-sms API
       const response = await fetch("/api/send-sms", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mobileNumber: parentPhone }),
+        body: JSON.stringify({ 
+          mobileNumber: parentPhone,
+          name: "Parent",
+          transactionId
+        }),
       });
 
       if (!response.ok) {
@@ -70,7 +72,6 @@ export default function OtpVerification({ closePopup, setOtp, onOtpVerified }: O
         throw new Error(error.error || "Failed to send OTP");
       }
 
-      // Show success message
       alert("OTP has been re-sent to your phone number");
     } catch (error) {
       console.error("Error resending OTP:", error);
@@ -90,18 +91,18 @@ export default function OtpVerification({ closePopup, setOtp, onOtpVerified }: O
       const response = await fetch("/api/validate-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mobileNumber: parentPhone, otp: enteredOtp }),
+        body: JSON.stringify({ 
+          mobileNumber: parentPhone, 
+          otp: enteredOtp,
+          transactionId 
+        }),
       });
   
       if (response.ok) {
-        const data = await response.json();
-        console.log("OTP validated successfully:", data.message);
-        
-        onOtpVerified(); // Call the onOtpVerified function
-        closePopup(); // Close the popup after successful verification
+        onOtpVerified();
+        closePopup();
       } else {
         const errorData = await response.json();
-        console.error("Failed to validate OTP:", errorData.error);
         alert(`Error: ${errorData.error}`);
       }
     } catch (error) {

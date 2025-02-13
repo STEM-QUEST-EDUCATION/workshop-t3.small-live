@@ -39,6 +39,7 @@ export interface WorkshopDocument extends Document {
   children_enrolled: number;
   kit_name: string;
   meta: string;
+  workshop_url: string;
 }
 
 const WorkshopSchema = new Schema<WorkshopDocument>({
@@ -67,6 +68,7 @@ const WorkshopSchema = new Schema<WorkshopDocument>({
   children_enrolled: { type: Number, required: true },
   kit_name: { type: String, required: true },
   meta: { type: String, required: true },
+  workshop_url: { type: String, required: true },
 });
 
 export const workshop =

@@ -98,10 +98,10 @@ export default function Footerpage() {
             <Link href="https://www.instagram.com/genius_labs.live/" className="bg-white p-2 rounded-full">
               <Instagram className="w-6 h-6 text-pink-400" />
             </Link>
-            <Link href="#" className="bg-white p-2 rounded-full">
+            <Link href="https://business.facebook.com/latest/home?business_id=1276543033268313&asset_id=119011211298580" className="bg-white p-2 rounded-full">
               <Facebook className="w-6 h-6 text-pink-400" />
             </Link>
-            <Link href="#" className="bg-white p-2 rounded-full">
+            <Link href="https://www.linkedin.com/in/genius-labs-4736ab286/" className="bg-white p-2 rounded-full">
               <Linkedin className="w-6 h-6 text-pink-400" />
             </Link>
             <Link href="https://www.youtube.com/@GeniusLabsWorkshops" className="bg-white p-2 rounded-full">

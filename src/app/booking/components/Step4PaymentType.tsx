@@ -61,10 +61,10 @@ export default function Step4PaymentType({ paymentType, setPaymentType, studentC
             <p className="text-gray-600 text-sm">Time: {workshopDetails.time}</p>
             <p className="text-gray-600 text-sm">Location: {workshopDetails.location}</p>
           </div>
-          <span className="flex flex-col items-center bg-blue-100 text-blue-600 px-2 py-1 rounded text-sm">
-            <span>{studentCount}</span>
-            <span>G-Ticket{studentCount > 1 ? 's' : ''}</span>
-          </span>
+          <div className="flex flex-col items-center bg-blue-100 text-blue-600 px-2 py-1 rounded text-sm">
+            <span>G-{studentCount}</span>
+            <span>Ticket{studentCount > 1 ? 's' : ''}</span>
+          </div>
         </div>
       </Card>
 

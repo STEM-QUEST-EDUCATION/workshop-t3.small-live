@@ -3,9 +3,9 @@ import { useSwipeable } from 'react-swipeable';
 import { FaWhatsapp } from 'react-icons/fa';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import Image from 'next/image';
 import { useTicketData } from '@/app/payment/hooks/useTicketData';
 import { format, isValid } from 'date-fns';
+import { Clock, MapPin, CalendarDays } from 'lucide-react';
 
 interface TicketCardProps {
   numberOfStudents: number;
@@ -125,30 +125,31 @@ const TicketCardWithActions: React.FC<TicketCardProps> = () => {
             <div key={index} className="flex-shrink-0 w-full flex justify-center">
               <div
                 ref={ticketRef}
-                className="w-[350px] h-[553px] bg-white bg-cover bg-center bg-no-repeat rounded-lg p-6 text-white relative"
+                className="w-full max-w-[350px] h-auto  bg-white bg-cover bg-center bg-no-repeat rounded-lg p-6 text-white relative"
                 style={{
                   backgroundImage: "url('/ticket/ticketBG.png')",
+                  aspectRatio: '553 / 350',
                   backgroundColor: '#ffffff',
                 }}
               >
                 <div className="flex flex-col items-center">
-                  <p className="text-xs font-medium font-montserrat text-center mb-4">
+                  <p className="text-xs font-medium font-montserrat text-center mb-2">
                     Transacted At: {ticket.transactionDate}
                   </p>
 
-                  <div className="flex flex-col w-full gap-2 mt-8 ml-2 mb-4">
+                  <div className="flex flex-col w-full gap-2 mt-8 ml-2">
                     {ticket.paymentMode === 'Pay at Centre' ? (
-                      <p className="text-sm font-medium font-montserrat text-left">
+                      <p className="text-sm font-medium font-montserrat text-left mb-4">
                         Receipt Number: {ticket.receiptNumber || 'Pending'}
                       </p>
                     ) : (
-                      <p className="text-sm font-medium font-montserrat text-left">
+                      <p className="text-xs font-medium font-montserrat text-left mb-1">
                         Transaction ID: {ticket.transactionId}
                       </p>
                     )}
                   </div>
 
-                  <h1 className="text-2xl font-bold text-[#FFD39F] text-center mt-2 mb-2">
+                  <h1 className="text-2xl xs:text-xl font-bold text-[#FFD39F] text-center mb-2">
                     {ticket.workshopTitle}
                   </h1>
 
@@ -156,29 +157,29 @@ const TicketCardWithActions: React.FC<TicketCardProps> = () => {
                     {ticket.studentName}
                   </h2>
 
-                  <p className="text-sm font-medium font-montserrat mb-6">
+                  <p className="text-sm font-medium font-montserrat mb-4">
                     Age :- {ticket.age}
                   </p>
 
-                  <div className="bg-[#09A5E826] rounded-2xl mt-2 pb-6 pt-4 px-6 w-[270px] mb-6">
+                  <div className="bg-[#09A5E826] rounded-2xl mt-2 pb-6 pt-4 px-6 w- mb-4">
                     <h3 className="text-[15px] font-bold text-[#FFD39F] mb-3 text-center">
                       WORKSHOP DETAILS
                     </h3>
 
                     <div className="flex items-center mb-3">
-                      <Image src="/ticket/location.svg" width={20} height={20} alt="location" className="w-5 h-5 mr-2" />
+                      <MapPin className="w-5 h-5 mr-2 ml-[-2px]" />
                       <span className="text-xs font-semibold">{ticket.location}</span>
                     </div>
 
                     <div className="flex items-center mb-3">
-                      <Image src="/ticket/date.svg" width={20} height={20} alt="date" className="w-4 h-4 mr-2" />
+                      <CalendarDays className="w-4 h-4 mr-2" />
                       <span className="text-xs font-semibold">
                         {isValid(new Date(ticket.date)) ? format(new Date(ticket.date), 'dd MMM yyyy') : ticket.date}
                       </span>
                     </div>
 
                     <div className="flex items-center">
-                      <Image src="/ticket/time.svg" width={20} height={20} alt="time" className="w-5 h-5 mr-2" />
+                      <Clock className="w-5 h-5 mr-2" />
                       <span className="text-xs font-semibold">{ticket.time}</span>
                     </div>
                   </div>
