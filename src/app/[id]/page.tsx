@@ -6,9 +6,12 @@ import ClientWorkshopDetails from "./ClientWorkshopDetails";
 import { notFound } from "next/navigation";
 
 function getApiUrl(id: string) {
+  if (!process.env.NEXT_PUBLIC_API_URL) {
+    throw new Error('NEXT_PUBLIC_API_URL environment variable is not set');
+  }
+  
   const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
-  const host = process.env.NEXT_PUBLIC_API_URL || "localhost:3000";
-  return `${protocol}://${host}/api/workshops/${id}`;
+  return `${protocol}://${process.env.NEXT_PUBLIC_API_URL}/api/workshops/${id}`;
 }
 
 async function fetchWorkshop(id: string) {
@@ -28,8 +31,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const resolvedParams = await params;
   const workshopData = await fetchWorkshop(resolvedParams.id);
   
-  const metaImageUrl = process.env.NEXT_PUBLIC_META_IMAGE_URL || 
-    "https://res.cloudinary.com/dzwxrbrcc/image/upload/v1739260148/rfw5ysda4j3pwyub4lu9.png";
+  if (!process.env.NEXT_PUBLIC_META_IMAGE_URL) {
+    throw new Error('NEXT_PUBLIC_META_IMAGE_URL environment variable is not set');
+  }
+  
+  const metaImageUrl = process.env.NEXT_PUBLIC_META_IMAGE_URL;
 
   if (!workshopData) {
     return {
