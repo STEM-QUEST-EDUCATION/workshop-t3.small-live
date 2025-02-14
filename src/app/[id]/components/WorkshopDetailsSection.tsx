@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { getAnalytics, logEvent } from "firebase/analytics";
-import { app } from "@/lib/firebaseConfig"; // Adjust the import path based on your project structure
+import { app } from "@/lib/firebaseConfig"; 
 
 // Discriminated union type for better type safety
 type DescriptionContent = 

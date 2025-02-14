@@ -1,12 +1,11 @@
-// next.config.js
 const nextConfig = {
   reactStrictMode: true,
   images: {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "dashboard.codeparrot.ai",
-        pathname: "/api/assets/**",
+        hostname: "res.cloudinary.com",
+        pathname: "/**",
       },
       {
         protocol: "https",
@@ -18,16 +17,30 @@ const nextConfig = {
         hostname: "www.facebook.com",
         pathname: "/**",
       },
-      // Add any additional domains below as needed
+      {
+        protocol: "https",
+        hostname: "dashboard.codeparrot.ai",
+        pathname: "/api/assets/**",
+      },
     ],
   },
-  // async rewrites() {
-  //   return {
-  //     beforeFiles: [
-  //       // Add any necessary rewrites here
-  //     ],
-  //   };
-  // },
+  async headers() {
+    return [
+      {
+        source: '/sitemap.xml',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/xml',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=59',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

@@ -4,7 +4,7 @@ import "./globals.css";
 import { nunito } from "@/styles/fonts";
 import Script from 'next/script';
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+
 
 export default function RootLayout({
   children,

@@ -33,7 +33,7 @@ export default function WorkshopDatePicker({
                 {stepLabel}
               </span>
             </div>
-            <h2 className="text-lg sm:text-xl font-semibold">{title}</h2>
+            <h2 className="text-lg sm:text-xl font-medium">{title}</h2>
             <ChevronsDown
               className="w-6 h-6 sm:w-8 sm:h-8 text-blue-gl animate-bounce-custom mr-0"
               strokeWidth={2}

@@ -17,7 +17,7 @@ import WorkshopDetailsSection from "./components/WorkshopDetailsSection";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { parse, differenceInHours } from "date-fns";
 import BookingClosedMessage from "./components/BookingClosedMessage";
-import { getAnalytics, logEvent } from "firebase/analytics";
+import { getAnalytics, logEvent, Analytics } from "firebase/analytics";
 import { app } from "@/lib/firebaseConfig"; // Adjust the import path based on your project structure
 
 // Dynamic imports with loading fallbacks
@@ -46,7 +46,7 @@ export default function ClientWorkshopDetails({
 }: ClientWorkshopDetailsProps) {
   const { setWorkshopDetails } = useBooking();
   const router = useRouter();
-  const [analytics, setAnalytics] = useState(null);
+  const [analytics, setAnalytics] = useState<Analytics | null>(null);
 
   const [workshopData] = useState<WorkshopDocument>(initialData);
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
@@ -84,7 +84,10 @@ export default function ClientWorkshopDetails({
 
   useEffect(() => {
     setMounted(true);
-    setAnalytics(getAnalytics(app));
+    // Only initialize analytics on the client side
+    if (typeof window !== 'undefined') {
+      setAnalytics(getAnalytics(app));
+    }
   }, []);
 
   const handleBookNow = async () => {

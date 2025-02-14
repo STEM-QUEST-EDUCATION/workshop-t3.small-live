@@ -26,7 +26,7 @@ const StepIndicator = ({ step, title }: StepIndicatorProps) => (
           />
           <span className="text-xs font-medium ">Step {step}</span>
         </div>
-        <h2 className="text-lg xs:text-base xxs:text-sm custom-font font-semibold">
+        <h2 className="text-lg xs:text-base xxs:text-sm custom-font font-medium">
           {title}
         </h2>
       </div>
