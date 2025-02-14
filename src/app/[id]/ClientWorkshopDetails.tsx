@@ -17,6 +17,8 @@ import WorkshopDetailsSection from "./components/WorkshopDetailsSection";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { parse, differenceInHours } from "date-fns";
 import BookingClosedMessage from "./components/BookingClosedMessage";
+import { getAnalytics, logEvent } from "firebase/analytics";
+import { app } from "@/lib/firebaseConfig"; // Adjust the import path based on your project structure
 
 // Dynamic imports with loading fallbacks
 const BackButtonDynamic = dynamic(() => import("./components/BackButton"), {
@@ -44,6 +46,7 @@ export default function ClientWorkshopDetails({
 }: ClientWorkshopDetailsProps) {
   const { setWorkshopDetails } = useBooking();
   const router = useRouter();
+  const [analytics, setAnalytics] = useState(null);
 
   const [workshopData] = useState<WorkshopDocument>(initialData);
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
@@ -81,6 +84,7 @@ export default function ClientWorkshopDetails({
 
   useEffect(() => {
     setMounted(true);
+    setAnalytics(getAnalytics(app));
   }, []);
 
   const handleBookNow = async () => {
@@ -100,6 +104,9 @@ export default function ClientWorkshopDetails({
       };
 
       setWorkshopDetails(workshopDetails);
+      if (analytics) {
+        logEvent(analytics, "book_now_clicked", { workshop_name: theme });
+      }
       router.push("/booking");
     } catch (error) {
       console.error("Booking error:", error);

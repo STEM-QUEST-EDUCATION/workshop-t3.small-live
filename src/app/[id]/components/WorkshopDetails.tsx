@@ -1,6 +1,6 @@
 import { MapPin, Star, Share2, Heart, Clock3 } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 
 interface WorkshopDetailsProps {
@@ -29,14 +29,20 @@ export default function WorkshopDetails({
   shareImage,
   theme,
 }: WorkshopDetailsProps) {
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
-  };
+  const [formattedDate, setFormattedDate] = useState("");
+
+  useEffect(() => {
+    const formatDate = (dateString: string) => {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      });
+    };
+    setFormattedDate(formatDate(date_of_workshop));
+  }, [date_of_workshop]);
+
   const [isHeartClicked, setIsHeartClicked] = useState(false);
 
   const toggleHeart = () => {
@@ -62,6 +68,13 @@ export default function WorkshopDetails({
     }
   };
 
+  useEffect(() => {
+    const metaOgUrl = document.querySelector('meta[property="og:url"]');
+    if (metaOgUrl) {
+      metaOgUrl.setAttribute("content", window.location.href);
+    }
+  }, []);
+
   return (
     <>
       <Head>
@@ -76,13 +89,13 @@ export default function WorkshopDetails({
           content={`Join the ${title} workshop happening on ${date_of_workshop}.`}
         />
         <meta property="og:image" content={shareImage} />
-        <meta property="og:url" content={window.location.href} />
+        <meta property="og:url" content="" />
       </Head>
 
       <div className="bg-white rounded-2xl pt-2 pb-1 px-2 shadow-lg">
         <div className="flex justify-between items-start">
           <p className="text-xs text-gray-500 custom-font">
-            {formatDate(date_of_workshop)}
+            {formattedDate}
           </p>
           <div className="flex gap-1">
             <button className="text-gray-500" onClick={handleShare}>

@@ -469,7 +469,6 @@ const handleOtpVerified = useCallback(() => {
           closePopup={handleCloseOtpPopup}
           handleSendOTP={handleSendOTP}
           onOtpVerified={handleOtpVerified}
-
         />
       </main>
 

@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { getAnalytics, logEvent } from "firebase/analytics";
+import { app } from "@/lib/firebaseConfig"; // Adjust the import path based on your project structure
 
 // Discriminated union type for better type safety
 type DescriptionContent = 
@@ -15,9 +17,14 @@ const WorkshopDetailsSection = ({
   description = [],
 }: WorkshopDetailsSectionProps) => {
   const [showFullText, setShowFullText] = useState(false);
+  const analytics = getAnalytics(app);
 
   const toggleText = () => {
-    setShowFullText((prev) => !prev);
+    setShowFullText((prev) => {
+      const newState = !prev;
+      logEvent(analytics, newState ? "view_more_clicked" : "view_less_clicked");
+      return newState;
+    });
   };
 
   // Improved type safety for shouldShowToggle check
