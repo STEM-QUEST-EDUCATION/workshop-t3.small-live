@@ -4,6 +4,7 @@ import "./globals.css";
 import { nunito } from "@/styles/fonts";
 import Script from 'next/script';
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 export default function RootLayout({
   children,
@@ -43,7 +44,7 @@ export default function RootLayout({
           />
         </noscript>
       </head>
-      <body>
+      <body className="min-h-screen bg-background font-sans antialiased">
         <BookingProvider>
           {children}
         </BookingProvider>
@@ -53,8 +54,38 @@ export default function RootLayout({
 }
 
 export const metadata: Metadata = {
-  title: "Lego-In-Action Robotics and AI Workshops",
-  description: "Best Lego-In-Action Robotics and AI Workshops to boost your child's logical and critical thinking and prepare them for next-gen skills",
+  title: "Lego Robotics & AI Workshops for Kids | Lego-In-Action",
+  description: "Transform your child's future with hands-on Lego robotics and AI workshops. Develop critical thinking, coding, and STEM skills through fun, interactive learning. Join Singapore's leading kids' tech education program.",
+  keywords: "Lego robotics workshop, AI for kids, STEM education, coding for children, robotics classes Singapore, kids technology workshop, Lego programming, educational workshops",
+  openGraph: {
+    title: "Lego Robotics & AI Workshops for Kids | Lego-In-Action",
+    description: "Transform your child's future with hands-on Lego robotics and AI workshops. Develop critical thinking, coding, and STEM skills through fun, interactive learning.",
+    type: "website",
+    locale: "en_SG",
+    siteName: "Lego-In-Action",
+    images: [
+      {
+        url: `${process.env.NEXT_PUBLIC_META_IMAGE_URL}`, 
+        width: 1200,
+        height: 630,
+        alt: "Lego-In-Action Robotics Workshop",
+      },
+    ],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  verification: {
+    google: "google53767c701146d920.html", 
+  },
 };
 
 

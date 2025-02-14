@@ -28,7 +28,7 @@ const workshopMeta: { [key: string]: { title: string; description: string } } = 
   },
   "6763b880cb2ae23a03f3d3c1": {
     title: "Smart City Vehicles Lego Workshop",
-    description: "Join GeniusLabs’ Smart City Vehicles workshop! 🚍🚤 Kids 6-12+ build & code Smart Buses & River Ferries using Scratch like platform & Python, exploring real-world transportation challenges. Hands-on STEM fun!",
+    description: "Join GeniusLabs' Smart City Vehicles workshop! 🚍🚤 Kids 6-12+ build & code Smart Buses & River Ferries using Scratch like platform & Python, exploring real-world transportation challenges. Hands-on STEM fun!",
   },
   "6763b880cb2ae23a03f3d3c8": {
     title: "Code a Game Workshop",
@@ -41,7 +41,7 @@ const workshopMeta: { [key: string]: { title: string; description: string } } = 
   // Add more workshop meta data here
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function IdLayout({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
   const [meta, setMeta] = useState({
     title: "Default Workshop Title",
@@ -58,12 +58,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   }, [searchParams]);
 
   return (
-    <html lang="en" className={`${nunito.variable}`}>
+    <html lang="en" className={nunito.variable}>
       <Head>
         <title>{isClient ? meta.title : "Loading..."}</title>
         <meta name="description" content={isClient ? meta.description : "Loading..."} />
       </Head>
-      <body className="no-select">{children}</body>
+      <body className="min-h-screen bg-background font-sans antialiased">
+        {children}
+      </body>
     </html>
   );
 }
