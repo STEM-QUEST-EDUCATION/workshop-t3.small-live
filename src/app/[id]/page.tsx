@@ -10,8 +10,11 @@ function getApiUrl(id: string) {
     throw new Error('NEXT_PUBLIC_API_URL environment variable is not set');
   }
   
-  const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
-  return `${protocol}://${process.env.NEXT_PUBLIC_API_URL}/api/workshops/${id}`;
+  // Remove any protocol prefix from the API URL
+  const cleanApiUrl = process.env.NEXT_PUBLIC_API_URL.replace(/^https?:\/\//, '');
+  const protocol = process.env.NODE_ENV === "development" ? "http://" : "https://";
+  
+  return `${protocol}${cleanApiUrl}/api/workshops/${id}`;
 }
 
 async function fetchWorkshop(id: string) {
