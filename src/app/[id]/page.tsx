@@ -4,6 +4,7 @@ import Loading from "./components/Loading";
 import { WorkshopDocument } from "@/models/Workshop";
 import ClientWorkshopDetails from "./ClientWorkshopDetails";
 import { notFound } from "next/navigation";
+import { generateWorkshopSchema, generateBreadcrumbSchema } from '@/lib/jsonld';
 
 function getApiUrl(id: string) {
   if (!process.env.NEXT_PUBLIC_API_URL) {
@@ -53,6 +54,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         description: "Book your workshop",
         images: [{ url: metaImageUrl, width: 1200, height: 630, alt: "Workshop" }],
       },
+      other: {
+        'application/ld+json': [
+          JSON.stringify(generateWorkshopSchema(workshopData)),
+          JSON.stringify(generateBreadcrumbSchema(workshopData))
+        ]
+      }
     };
   }
 
@@ -83,6 +90,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     icons: {
       icon: '/favicon.ico',
     },
+    other: {
+      'application/ld+json': [
+        JSON.stringify(generateWorkshopSchema(workshopData)),
+        JSON.stringify(generateBreadcrumbSchema(workshopData))
+      ]
+    }
   };
 }
 
