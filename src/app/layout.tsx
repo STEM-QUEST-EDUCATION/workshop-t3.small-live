@@ -113,14 +113,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 export const metadata: Metadata = {
   title: {
-    default: "Best Coding Classes for Kids in India | Lego Robotics Workshops",
+    default: "Lego-In-Action Robotics and AI Workshops",
     template: "%s | Lego-In-Action India"
   },
   description: META_DESCRIPTION,
   openGraph: {
-    title: "Affordable Lego Robotics Workshops in India",
+    title: "Lego-In-Action Robotics and AI Workshops",
     description:
-      "Transform your child's future with hands-on AI and robotics courses. Best coding classes for kids in India - start learning today!",
+      "Best Lego-In-Action Robotics and AI Workshops to boost your child's logical and critical thinking and prepare them for next-gen skills",
     type: "website",
     locale: "hi-IN",
     siteName: SITE_NAME,
