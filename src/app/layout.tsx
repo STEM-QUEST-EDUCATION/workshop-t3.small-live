@@ -5,11 +5,11 @@ import { nunito } from "@/styles/fonts";
 import Script from "next/script";
 import { generateOrganizationSchema } from "@/lib/jsonld";
 
-
 const SITE_NAME = "Genius Labs";
-const CANONICAL_URL = "https://workshops.geniuslabs.live";
+const CANONICAL_URL = "https://geniuslabs.live/";
 const META_DESCRIPTION =
-  "Best coding classes for kids in India! Develop STEM skills through Lego robotics and AI workshops. Affordable, interactive courses with expert instructors.";
+  "Best Lego-In-Action Robotics and AI Workshops to boost your child's logical and critical thinking and prepare them for next-gen skills";
+const META_IMAGE_URL = "https://geniuslabs.live/stemgames/images/banner.webp"; // Update this to a valid image URL
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -52,13 +52,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               "provider": {
                 "@type": "Organization",
                 "name": "${SITE_NAME}",
-                "sameAs": [${CANONICAL_URL}]
+                "sameAs": ["${CANONICAL_URL}"]
               },
               "educationalLevel": "Beginner",
               "learningResourceType": "Workshop",
               "image": {
                 "@type": "ImageObject",
-                "url": "${process.env.NEXT_PUBLIC_META_IMAGE_URL}",
+                "url": "${META_IMAGE_URL}",
                 "width": 1200,
                 "height": 630
               },
@@ -88,14 +88,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta property="og:url" content={CANONICAL_URL} />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content={SITE_NAME} />
-        <meta
-          property="og:image"
-          content={process.env.NEXT_PUBLIC_META_IMAGE_URL}
-        />
-        <meta
-          property="og:image:alt"
-          content="Lego Robotics Workshop India"
-        />
+        <meta property="og:image" content={META_IMAGE_URL} />
+        <meta property="og:image:alt" content="Lego Robotics Workshop India" />
         <meta property="fb:app_id" content="1269850464093849" />
 
         {/* Organization Schema */}
@@ -126,11 +120,11 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_META_IMAGE_URL}` || "https://res.cloudinary.com/dzwxrbrcc/image/upload/v1739260148/rfw5ysda4j3pwyub4lu9.png",
+        url: META_IMAGE_URL,
         width: 1200,
         height: 630,
         alt: "Lego Robotics Workshop India",
-        type: "image/png"
+        type: "image/webp"
       }
     ]
   },
