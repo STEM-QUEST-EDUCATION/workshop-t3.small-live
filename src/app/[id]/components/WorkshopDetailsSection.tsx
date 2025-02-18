@@ -7,7 +7,7 @@ import { app } from "@/lib/firebaseConfig";
 // Discriminated union type for better type safety
 type DescriptionContent = 
   | { type: "paragraph"; content: string }
-  | { type: "list"; content: string[] };
+  | { type: "list"; content: string; subpoints?: string[] };
 
 interface WorkshopDetailsSectionProps {
   description?: DescriptionContent[];
@@ -44,50 +44,55 @@ const WorkshopDetailsSection = ({
       case "list":
         return (
           <ul key={index} className="list-disc ml-6 space-y-2">
-            {item.content.map((listItem, i) => (
-              <li key={i} className="mb-2 text-gray-600 text-xs">
-                {listItem}
-              </li>
-            ))}
+            <li className="mb-2 text-gray-600 text-xs">
+              {item.content}
+              {item.subpoints && (
+                <ul className="list-disc ml-6 space-y-1">
+                  {item.subpoints.map((subpoint, j) => (
+                    <li key={j} className="text-gray-600 text-xs">
+                      {subpoint}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
           </ul>
         );
     }
   };
 
   return (
-    <>
-      <div className="bg-white rounded-xl shadow-md p-2 mb-4">
-        <h2 className="text-base font-semibold custom-font mb-1 mx-3">
-          Workshop Details
-        </h2>
-        <div className="relative">
-          <div
-            className={`text-xs font-normal text-gray-600 mx-3 transition-all duration-300 ease-in-out ${
-              !showFullText ? "max-h-24 overflow-hidden" : ""
-            }`}
-          >
-            {description.map((item, index) => renderContent(item, index))}
-          </div>
-          {!showFullText && shouldShowToggle && (
-            <div 
-              className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white to-transparent"
-              aria-hidden="true"
-            />
-          )}
+    <div className="bg-white rounded-xl shadow-md p-2 mb-4">
+      <h2 className="text-base font-semibold custom-font mb-1 mx-3">
+        Workshop Details
+      </h2>
+      <div className="relative">
+        <div
+          className={`text-xs font-normal text-gray-600 mx-3 transition-all duration-300 ease-in-out ${
+            !showFullText ? "max-h-24 overflow-hidden" : ""
+          }`}
+        >
+          {description.map((item, index) => renderContent(item, index))}
         </div>
-
-        {shouldShowToggle && (
-          <Button
-            variant="link"
-            className="text-blue-500 p-0 text-xs font-normal mb-2 mx-3 hover:text-blue-600"
-            onClick={toggleText}
-            aria-expanded={showFullText}
-          >
-            {showFullText ? "View Less" : "View More"}
-          </Button>
+        {!showFullText && shouldShowToggle && (
+          <div 
+            className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white to-transparent"
+            aria-hidden="true"
+          />
         )}
       </div>
-    </>
+
+      {shouldShowToggle && (
+        <Button
+          variant="link"
+          className="text-blue-500 p-0 text-xs font-normal mb-2 mx-3 hover:text-blue-600"
+          onClick={toggleText}
+          aria-expanded={showFullText}
+        >
+          {showFullText ? "View Less" : "View More"}
+        </Button>
+      )}
+    </div>
   );
 };
 

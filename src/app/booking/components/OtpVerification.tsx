@@ -16,6 +16,7 @@ export default function OtpVerification({ closePopup, setOtp, onOtpVerified }: O
   const { parentPhone, transactionId } = useBooking(); // Access the parent's phone number and transaction ID
   const [otp, _setOtp] = useState<string[]>(Array(6).fill(""));
   const [timeLeft, setTimeLeft] = useState(60); // 60 seconds
+  const [isVerifying, setIsVerifying] = useState(false); // Add state for verifying
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
@@ -86,6 +87,7 @@ export default function OtpVerification({ closePopup, setOtp, onOtpVerified }: O
 
   const handleVerify = async () => {
     const enteredOtp = otp.join("");
+    setIsVerifying(true); // Set verifying state to true
     
     try {
       const response = await fetch("/api/validate-otp", {
@@ -108,6 +110,8 @@ export default function OtpVerification({ closePopup, setOtp, onOtpVerified }: O
     } catch (error) {
       console.error("Error during OTP validation:", error);
       alert("An error occurred while validating OTP. Please try again.");
+    } finally {
+      setIsVerifying(false); // Set verifying state to false
     }
   };
 
@@ -169,10 +173,18 @@ export default function OtpVerification({ closePopup, setOtp, onOtpVerified }: O
           </div>
           <Button
             className="w-full bg-[#00A0E4] text-white hover:bg-[#0090D4] mt-4"
-            disabled={otp.some((digit) => digit === "")}
+            disabled={otp.some((digit) => digit === "") || isVerifying} // Disable button if verifying
             onClick={handleVerify}
           >
-            Verify
+            {isVerifying ? (
+              <div className="flex flex-row gap-2">
+                <div className="w-4 h-4 rounded-full bg-[#00A0E4] animate-bounce"></div>
+                <div className="w-4 h-4 rounded-full bg-[#00A0E4] animate-bounce [animation-delay:-.3s]"></div>
+                <div className="w-4 h-4 rounded-full bg-[#00A0E4] animate-bounce [animation-delay:-.5s]"></div>
+              </div>
+            ) : (
+              "Verify"
+            )}
           </Button>
         </div>
       </div>

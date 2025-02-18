@@ -1,5 +1,4 @@
-// models/Workshop.ts
-import mongoose, { Schema, Document} from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
 interface BaseDescriptionItem {
   type: "paragraph" | "list";
@@ -12,7 +11,8 @@ interface ParagraphDescription extends BaseDescriptionItem {
 
 interface ListDescription extends BaseDescriptionItem {
   type: "list";
-  content: string[];
+  content: string;
+  subpoints?: string[];
 }
 
 type DescriptionItem = ParagraphDescription | ListDescription;
@@ -55,7 +55,8 @@ const WorkshopSchema = new Schema<WorkshopDocument>({
   description: [
     {
       type: { type: String, enum: ["paragraph", "list"], required: true },
-      content: { type: Schema.Types.Mixed, required: true },
+      content: { type: String, required: true },
+      subpoints: { type: [String], required: false },
     },
   ],
   location: {

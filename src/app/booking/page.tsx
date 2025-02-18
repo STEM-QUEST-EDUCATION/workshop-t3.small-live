@@ -69,6 +69,7 @@ export default function HomePage() {
   const [showOtpPopup, setShowOtpPopup] = useState(false);
   const [paymentInitiated, setPaymentInitiated] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [isGeneratingTicket, setIsGeneratingTicket] = useState(false); // Add state for generating ticket
   const router = useRouter();
   const easebuzzScript = useRef<HTMLScriptElement | null>(null);
 
@@ -196,6 +197,8 @@ export default function HomePage() {
       return;
     }
 
+    setIsVerifying(true); // Start the loader when OTP is being sent
+
     try {
       // First save the payment info to get a transaction ID
       const childDetails = bookingData.children.map((child) => ({
@@ -255,6 +258,8 @@ export default function HomePage() {
         ...prev,
         phone1: error instanceof Error ? error.message : "Failed to send OTP",
       }));
+    } finally {
+      setIsVerifying(false); // Stop the loader when OTP is sent or failed
     }
   }, [
     parentContact.phone1,
@@ -335,12 +340,13 @@ export default function HomePage() {
 
   const handleCloseOtpPopup = useCallback(() => {
     setShowOtpPopup(false);
-    
+    setIsVerifying(false); // Stop the loader when popup is closed
   }, []);
 
   // HomePage.tsx
 const handleOtpVerified = useCallback(() => {
   setStep(4);
+  setIsVerifying(false); // Stop the loader when OTP is verified
 }, []);
 
   const isNextDisabled = useCallback(() => {
@@ -367,7 +373,8 @@ const handleOtpVerified = useCallback(() => {
 
   const handleGenerateTicket = useCallback(async () => {
     console.log("Generate ticket");
-    
+    setIsGeneratingTicket(true); // Start the loader when generating ticket
+
     try {
       if (!transactionId) {
         throw new Error("Transaction ID is missing");
@@ -415,6 +422,8 @@ const handleOtpVerified = useCallback(() => {
     } catch (error) {
       console.error("Error generating ticket:", error);
       alert("Failed to generate ticket. Please try again.");
+    } finally {
+      setIsGeneratingTicket(false); // Stop the loader when ticket generation is complete or failed
     }
   }, [workshopDetails, bookingData, parentPhone, orderTotal, router, setBookingData, transactionId]);
 
@@ -424,7 +433,7 @@ const handleOtpVerified = useCallback(() => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg text-center">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#00A0E4] mx-auto mb-4"></div>
-            <p className="text-gray-700">Verifying payment...</p>
+            <p className="text-gray-700">Sending OTP...</p>
           </div>
         </div>
       )}
@@ -486,7 +495,8 @@ const handleOtpVerified = useCallback(() => {
             disabled={
               isNextDisabled() ||
               (step === 3 && showOtpPopup) ||
-              paymentInitiated
+              paymentInitiated ||
+              isGeneratingTicket // Disable button if generating ticket
             }
             onClick={() => {
               if (step === 3) {
@@ -506,7 +516,13 @@ const handleOtpVerified = useCallback(() => {
               ? "Verify OTP"
               : step === 4
                 ? paymentType === 'later'
-                  ? "Generate Ticket"
+                  ? isGeneratingTicket ? (
+                    <div className="flex flex-row gap-2">
+                      <div className="w-4 h-4 rounded-full bg-white animate-bounce"></div>
+                      <div className="w-4 h-4 rounded-full bg-white animate-bounce [animation-delay:-.3s]"></div>
+                      <div className="w-4 h-4 rounded-full bg-white animate-bounce [animation-delay:-.5s]"></div>
+                    </div>
+                  ) : "Generate Ticket"
                   : "Make Payment"
                 : "Next"}
           </Button>
