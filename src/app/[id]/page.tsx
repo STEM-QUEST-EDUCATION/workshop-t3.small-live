@@ -1,14 +1,13 @@
 // src/app/[id]/page.tsx
 import { Suspense } from "react";
 import Loading from "./components/Loading";
-import { WorkshopDocument } from "@/models/Workshop";
 import ClientWorkshopDetails from "./ClientWorkshopDetails";
 import { notFound } from "next/navigation";
 import { generateWorkshopSchema, generateBreadcrumbSchema } from '@/lib/jsonld';
 
 function getApiUrl(id: string) {
   // For server-side rendering, use absolute URL
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://workshops.geniuslabs.live';
   return `${baseUrl}/api/workshops/${id}`;
 }
 
