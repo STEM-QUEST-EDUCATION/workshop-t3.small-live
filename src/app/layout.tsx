@@ -13,15 +13,15 @@ const META_IMAGE_URL = "https://geniuslabs.live/stemgames/images/banner.webp"; /
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="hi-IN" className={nunito.variable} data-theme="light">
+    <html lang="en" className={nunito.variable}>
       <head>
         {/* Critical Resources */}
-        <link rel="preload" href="/globals.css" as="style" />
+       
         <link
           rel="preload"
-          href="/fonts/Nunito-Regular.woff2"
+          href="/fonts/Nunito-Regular.ttf"
           as="font"
-          type="font/woff2"
+          type="font/ttf"
           crossOrigin="anonymous"
         />
 
@@ -149,9 +149,5 @@ export const metadata: Metadata = {
       "text/calendar": `${CANONICAL_URL}/calendar.ics`
     }
   },
-  icons: {
-    icon: "/favicon-in.ico",
-    shortcut: "/favicon-shortcut-in.png",
-    apple: "/apple-touch-icon-in.png"
-  }
+  
 };

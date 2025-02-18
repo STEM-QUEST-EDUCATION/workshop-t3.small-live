@@ -4,15 +4,23 @@ import { workshop } from "@/models/Workshop";
 import { Types } from "mongoose";
 
 export async function GET(request: NextRequest) {
-  try {
-    // Extract the workshopId from the URL
-    const workshopId = request.nextUrl.pathname.split("/").pop();
+  // Extract the workshopId from the URL
+  const workshopId = request.nextUrl.pathname.split("/").pop();
 
-    // Validate the workshopId to ensure it's a valid MongoDB ObjectId
+  // Ignore requests for static files
+  if (workshopId?.includes('.')) {
+    return NextResponse.json(
+      { success: false, message: "Not Found" },
+      { status: 404 }
+    );
+  }
+
+  try {
+    // Validate the workshopId
     if (!workshopId || !Types.ObjectId.isValid(workshopId)) {
       return NextResponse.json(
         { success: false, message: "Invalid Workshop ID" },
-        { status: 400 } // Bad Request
+        { status: 400 }
       );
     }
 

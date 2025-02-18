@@ -85,7 +85,7 @@ export default function ClientWorkshopDetails({
   useEffect(() => {
     setMounted(true);
     // Only initialize analytics on the client side
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       setAnalytics(getAnalytics(app));
     }
   }, []);

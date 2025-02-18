@@ -7,24 +7,32 @@ import { notFound } from "next/navigation";
 import { generateWorkshopSchema, generateBreadcrumbSchema } from '@/lib/jsonld';
 
 function getApiUrl(id: string) {
-  if (!process.env.NEXT_PUBLIC_API_URL) {
-    throw new Error('NEXT_PUBLIC_API_URL environment variable is not set');
-  }
-  
-  // Remove any protocol prefix from the API URL
-  const cleanApiUrl = process.env.NEXT_PUBLIC_API_URL.replace(/^https?:\/\//, '');
-  const protocol = process.env.NODE_ENV === "development" ? "http://" : "https://";
-  
-  return `${protocol}${cleanApiUrl}/api/workshops/${id}`;
+  // For server-side rendering, use absolute URL
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  return `${baseUrl}/api/workshops/${id}`;
 }
 
 async function fetchWorkshop(id: string) {
   try {
-    const response = await fetch(getApiUrl(id), { next: { revalidate: 3600 } });
-    if (!response.ok) throw new Error(`API response error: ${response.status}`);
+    const response = await fetch(getApiUrl(id), { 
+      next: { revalidate: 3600 },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!response.ok) {
+      console.error(`API error: ${response.status} for ID: ${id}`);
+      return null;
+    }
+    
     const data = await response.json();
-    if (!data.data || !data.success) throw new Error("Invalid data structure");
-    return data.data as WorkshopDocument;
+    if (!data.data || !data.success) {
+      console.error('Invalid data structure:', data);
+      return null;
+    }
+    
+    return data.data;
   } catch (error) {
     console.error("Error fetching workshop:", error);
     return null;
