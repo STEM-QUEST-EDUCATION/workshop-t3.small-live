@@ -110,6 +110,18 @@ export default function ClientWorkshopDetails({
       if (analytics) {
         logEvent(analytics, "book_now_clicked", { workshop_name: theme });
       }
+
+      // Track Facebook Pixel event
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'BookNow', {
+          content_ids: [workshopData._id?.toString()],
+          content_name: theme,
+          content_type: 'workshop',
+          value: workshopData.rate,
+          currency: 'INR'
+        });
+      }
+
       router.push("/booking");
     } catch (error) {
       console.error("Booking error:", error);
