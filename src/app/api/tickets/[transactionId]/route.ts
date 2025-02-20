@@ -37,6 +37,7 @@ interface BookingDocument {
   center_code: string;
   time: string;
   workshop_location?: string;
+  date_of_workshop: Date;
   [key: string]: unknown; // For any additional fields
 }
 
@@ -91,6 +92,7 @@ export async function GET(
       paymentMode: booking.payment.mode === "DC" ? "Paid" : "Pay at Centre",
       transactionId: booking.payment.Transaction_ID,
       receiptNumber: booking.payment.offline_details?.receipt_no,
+      date_of_workshop: booking.date_of_workshop,
     }));
 
     return NextResponse.json(ticketData);

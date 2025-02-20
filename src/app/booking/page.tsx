@@ -215,6 +215,7 @@ export default function HomePage() {
         orderTotal: totalCost,
         product_info: workshopDetails.name,
         time: workshopDetails.time,
+        date_of_workshop: workshopDetails.date,
         paymentType: paymentType
       };
 

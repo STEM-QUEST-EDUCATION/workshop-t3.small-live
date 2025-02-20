@@ -8,6 +8,7 @@ interface Booking {
     age: number;
   }>;
   ph_number: string;
+  date_of_workshop: string;
   otp_verified: boolean;
   time: string;
   payment: {
@@ -53,6 +54,7 @@ const bookingSchema = new Schema<BookingDocument>({
   ],
   ph_number: { type: String, required: true },
   otp_verified: { type: Boolean, required: true },
+  date_of_workshop: { type: String, required: true },
   time: { type: String, required: true },
   payment: {
     Transaction_ID: { type: String, required: true, unique: true }, // UUID for transaction id

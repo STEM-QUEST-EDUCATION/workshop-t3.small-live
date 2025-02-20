@@ -11,6 +11,7 @@ interface PaymentRequest {
   orderTotal: number; 
   product_info: string; 
   time: string;
+  date_of_workshop: string;
 }
 
 export async function POST(request: NextRequest) {
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest) {
     const requestData: PaymentRequest = await request.json();
     console.log("Incoming request data:", requestData); 
 
-    const { workshop_id, children, ph_number, orderTotal, product_info, time } = requestData; // Access orderTotal and product_info 
+    const { workshop_id, children, ph_number, orderTotal, product_info, time, date_of_workshop } = requestData; // Destructure date_of_workshop
     console.log("workshop_id:", workshop_id, "children:", children, "ph_number:", ph_number, "orderTotal:",orderTotal, "time:",time);
 
     const uniqueId = uuidv4();
@@ -33,6 +34,7 @@ export async function POST(request: NextRequest) {
       ph_number: ph_number,
       otp_verified: false,
       time : time,
+      date_of_workshop: date_of_workshop,
       payment: {
         Transaction_ID: uniqueId,
         gateway: null,

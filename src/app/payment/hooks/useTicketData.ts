@@ -15,6 +15,7 @@ interface TicketData {
   bookingId: string;
   transactionId: string;
   receiptNumber?: string;
+  date_of_workshop: string;
 }
 
 export function useTicketData() {
@@ -58,7 +59,8 @@ export function useTicketData() {
             location: workshopDetails.location || ticket.location,
             date: workshopDetails.date,
             // Set payment mode based on payment type
-            paymentMode: paymentType === 'offline' ? 'Pay at Centre' : 'Paid'
+            paymentMode: paymentType === 'offline' ? 'Pay at Centre' : 'Paid',
+            date_of_workshop: ticket.date_of_workshop,
           }));
           setTicketData(updatedData);
         } else if (data.error) {

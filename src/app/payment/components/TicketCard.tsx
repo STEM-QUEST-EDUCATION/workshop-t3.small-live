@@ -174,7 +174,7 @@ const TicketCardWithActions: React.FC<TicketCardProps> = () => {
                     <div className="flex items-center mb-3">
                       <CalendarDays className="w-4 h-4 mr-2" />
                       <span className="text-xs font-semibold">
-                        {isValid(new Date(ticket.date)) ? format(new Date(ticket.date), 'dd MMM yyyy') : ticket.date}
+                        {isValid(new Date(ticket.date_of_workshop)) ? format(new Date(ticket.date_of_workshop), 'dd MMM yyyy') : ticket.date_of_workshop || '' }
                       </span>
                     </div>
 

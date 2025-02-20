@@ -159,13 +159,26 @@ export default function ClientWorkshopDetails({
       <main className="max-w-md mx-auto bg-gray-50 min-h-screen pb-5">
         <div className="relative h-[50vh] rounded-b-[2rem] overflow-hidden">
           <div className="absolute inset-0 w-full h-full">
-            <iframe
-              className="absolute top-0 left-0 w-full h-full"
-              src={workshopData.workshop_url}
-              allow="autoplay; encrypted-media"
-              loading="lazy"
-              style={{ transform: "scale(1.1)", transformOrigin: "center" }}
-            />
+            {workshopData.workshop_url ? (
+              <iframe
+                className="absolute top-0 left-0 w-full h-full"
+                src={workshopData.workshop_url}
+                allow="autoplay; encrypted-media"
+                loading="lazy"
+                style={{ transform: "scale(1.1)", transformOrigin: "center" }}
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                <div className="flex flex-col items-center gap-3">
+                  <div className="w-16 h-16 border-4 border-gray-200 border-t-[#09A5E8] rounded-full animate-spin" />
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-[#09A5E8] rounded-full animate-bounce [animation-delay:-0.3s]" />
+                    <div className="w-2 h-2 bg-[#09A5E8] rounded-full animate-bounce [animation-delay:-0.15s]" />
+                    <div className="w-2 h-2 bg-[#09A5E8] rounded-full animate-bounce" />
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           <BackButtonDynamic />
           <div className="absolute bottom-7 left-0 right-0 transform translate-y-[10%] px-4">
