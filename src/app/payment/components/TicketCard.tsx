@@ -6,7 +6,7 @@ import html2canvas from 'html2canvas';
 import { useTicketData } from '@/app/payment/hooks/useTicketData';
 import { format, isValid } from 'date-fns';
 import { Clock, MapPin, CalendarDays } from 'lucide-react';
-
+import LoadingTicket from './loading';
 interface TicketCardProps {
   numberOfStudents: number;
 }
@@ -22,7 +22,7 @@ const TicketCardWithActions: React.FC<TicketCardProps> = () => {
   });
 
   if (isLoading) {
-    return <div>Loading tickets...</div>;
+    return <LoadingTicket />;
   }
 
   if (error) {
@@ -34,6 +34,7 @@ const TicketCardWithActions: React.FC<TicketCardProps> = () => {
   }
 
   const currentTicket = ticketData[currentIndex] || {};
+  console.log('Current ticket:', currentTicket);
 
   // Calculate per child amount
   const totalAmount = parseInt(currentTicket.price.replace(/[^0-9]/g, ''));
@@ -98,16 +99,18 @@ const TicketCardWithActions: React.FC<TicketCardProps> = () => {
       const pdfBlob = pdf.output('blob');
       const pdfFile = new File([pdfBlob], 'GeniusLabs Workshop Ticket.pdf', { type: 'application/pdf' });
 
+      const locationText = `${currentTicket.location.address}, ${currentTicket.location.city}`;
+
       if (navigator.share && navigator.canShare({ files: [pdfFile] })) {
         await navigator.share({
           files: [pdfFile],
           title: 'Workshop Tickets',
-          text: `Here is link to the Lego-In-Action workshop I've booked, themed "${currentTicket.workshopTitle}" The plan is set for ${currentTicket.date} at ${currentTicket.location}. See if you can join me`,
+          text: `Here is link to the Lego-In-Action workshop I've booked, themed "${currentTicket.workshopTitle}". The plan is set for ${format(new Date(currentTicket.date_of_workshop), 'dd MMM yyyy')} at ${locationText}. See if you can join me. Your tickets are attached. ${window.location.href}`,
         });
       } else {
         const pdfUrl = URL.createObjectURL(pdfBlob);
 
-        window.open(`https://web.whatsapp.com/send?text=${encodeURIComponent(`Here is link to the Lego-In-Action workshop I've booked, themed "${currentTicket.workshopTitle}" The plan is set for ${currentTicket.date} at ${currentTicket.location}. See if you can join me`)}&attachment=${encodeURIComponent(pdfUrl)}`);
+        window.open(`https://web.whatsapp.com/send?text=${encodeURIComponent(`Here is link to the Lego-In-Action workshop I've booked, themed "${currentTicket.workshopTitle}". The plan is set for ${format(new Date(currentTicket.date_of_workshop), 'dd MMM yyyy')} at ${locationText}. Join me here: ${window.location.href}`)}&attachment=${encodeURIComponent(pdfUrl)}`);
 
         setTimeout(() => URL.revokeObjectURL(pdfUrl), 60000);
       }
@@ -119,13 +122,13 @@ const TicketCardWithActions: React.FC<TicketCardProps> = () => {
 
   return (
     <div className="w-full min-h-screen bg-gray-50 flex flex-col items-center mt-4">
-      <div className="relative w-full overflow-hidden" {...handlers}>
+      <div className="relative w-full h-full overflow-hidden" {...handlers}>
         <div className="flex transition-transform duration-300" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
           {ticketData.map((ticket, index) => (
-            <div key={index} className="flex-shrink-0 w-full flex justify-center">
+            <div key={index} className="flex-shrink-0 w-full h-full flex justify-center items-center">
               <div
                 ref={ticketRef}
-                className="w-full max-w-[350px] h-auto  bg-white bg-cover bg-center bg-no-repeat rounded-lg p-6 text-white relative"
+                className="w-full max-w-[350px] h-auto max-h-[553px] bg-white bg-cover bg-center bg-no-repeat rounded-lg p-4 text-white relative"
                 style={{
                   backgroundImage: "url('/ticket/ticketBG.png')",
                   aspectRatio: '553 / 350',
@@ -168,7 +171,11 @@ const TicketCardWithActions: React.FC<TicketCardProps> = () => {
 
                     <div className="flex items-center mb-3">
                       <MapPin className="w-5 h-5 mr-2 ml-[-2px]" />
-                      <span className="text-xs font-semibold">{ticket.location}</span>
+                      <span className="text-xs font-semibold">
+                        {typeof ticket.location === 'object' 
+                          ? `${ticket.location.address}, ${ticket.location.city}`
+                          : ticket.location}
+                      </span>
                     </div>
 
                     <div className="flex items-center mb-3">

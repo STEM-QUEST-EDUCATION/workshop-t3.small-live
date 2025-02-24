@@ -12,6 +12,11 @@ interface PaymentRequest {
   product_info: string; 
   time: string;
   date_of_workshop: string;
+  paymentType: string;
+  location: {
+    address: string;
+    city: string;
+  };
 }
 
 export async function POST(request: NextRequest) {
@@ -22,7 +27,7 @@ export async function POST(request: NextRequest) {
     const requestData: PaymentRequest = await request.json();
     console.log("Incoming request data:", requestData); 
 
-    const { workshop_id, children, ph_number, orderTotal, product_info, time, date_of_workshop } = requestData; // Destructure date_of_workshop
+    const { workshop_id, children, ph_number, orderTotal, product_info, time, date_of_workshop, location } = requestData;
     console.log("workshop_id:", workshop_id, "children:", children, "ph_number:", ph_number, "orderTotal:",orderTotal, "time:",time);
 
     const uniqueId = uuidv4();
@@ -35,6 +40,7 @@ export async function POST(request: NextRequest) {
       otp_verified: false,
       time : time,
       date_of_workshop: date_of_workshop,
+      workshop_location: `${location.address}, ${location.city}`,
       payment: {
         Transaction_ID: uniqueId,
         gateway: null,
@@ -43,7 +49,7 @@ export async function POST(request: NextRequest) {
         product_info: product_info,
         reference_id: "REF_" + uniqueId,
         hash_key: null,
-        amount: orderTotal, // Replace with calculated amount
+        amount: orderTotal,
         access_key: null,
         surl: null,
         furl: null,

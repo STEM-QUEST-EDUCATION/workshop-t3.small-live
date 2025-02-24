@@ -39,6 +39,7 @@ interface Booking {
     name: string | null;
     transaction_id: string | null;
   };
+  workshop_location: string;
 }
 
 // Define the Booking document interface extending Document
@@ -56,6 +57,7 @@ const bookingSchema = new Schema<BookingDocument>({
   otp_verified: { type: Boolean, required: true },
   date_of_workshop: { type: String, required: true },
   time: { type: String, required: true },
+  workshop_location: { type: String, required: true },
   payment: {
     Transaction_ID: { type: String, required: true, unique: true }, // UUID for transaction id
     gateway: { type: String },

@@ -46,13 +46,17 @@ export interface TicketData {
   workshopTitle: string;
   studentName: string;
   age: string;
-  location: string;
+  location: {
+    address: string;
+    city: string;
+  };
   date: string;
   time: string;
   price: string;
   paymentMode: string;
   transactionId: string;
   receiptNumber?: string;
+  date_of_workshop: string;
 }
 
 export async function GET(
@@ -85,7 +89,10 @@ export async function GET(
       workshopTitle: booking.payment.product_info,
       studentName: child.childname,
       age: `${child.age} yrs`,
-      location: booking.center_code,
+      location: {
+        address: booking.workshop_location?.split(',')[0]?.trim() || '',
+        city: booking.workshop_location?.split(',')[1]?.trim() || ''
+      },
       date: format(new Date(booking.created_at), "dd MMM yyyy"),
       time: booking.time,
       price: `₹${booking.payment.amount}`,

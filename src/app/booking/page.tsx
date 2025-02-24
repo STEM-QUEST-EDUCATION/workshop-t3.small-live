@@ -216,7 +216,11 @@ export default function HomePage() {
         product_info: workshopDetails.name,
         time: workshopDetails.time,
         date_of_workshop: workshopDetails.date,
-        paymentType: paymentType
+        paymentType: paymentType,
+        location: {
+          address: workshopDetails.location.split(',')[0].trim(),
+          city: workshopDetails.location.split(',')[1].trim()
+        }
       };
 
       // Save initial payment information

@@ -7,7 +7,10 @@ interface TicketData {
   studentName: string;
   age: string;
   venue: string;
-  location: string;
+  location: {
+    address: string;
+    city: string;
+  };
   date: string;
   time: string;
   price: string;
@@ -56,9 +59,11 @@ export function useTicketData() {
         if (Array.isArray(data)) {
           const updatedData = data.map((ticket) => ({
             ...ticket,
-            location: workshopDetails.location || ticket.location,
+            location: ticket.location || {
+              address: workshopDetails.location?.split(',')[0]?.trim() || '',
+              city: workshopDetails.location?.split(',')[1]?.trim() || ''
+            },
             date: workshopDetails.date,
-            // Set payment mode based on payment type
             paymentMode: paymentType === 'offline' ? 'Pay at Centre' : 'Paid',
             date_of_workshop: ticket.date_of_workshop,
           }));
