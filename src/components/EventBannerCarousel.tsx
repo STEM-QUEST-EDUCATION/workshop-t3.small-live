@@ -13,17 +13,17 @@ interface EventBanner {
 const eventBanners: EventBanner[] = [
   {
     id: 1,
-    imageUrl: "/banner/banner1.png", // Update with your PNG path
+    imageUrl: "/banner/Banner1.png", // Update with your PNG path
     alt: "Book Now the Lego-In-Action Robotics and Coding Workshops powered by LEGO Education, Scratch and other education partners. Learn  Fundamentals of  Robotics, Coding and AI one workshop at a time where new themes keep coming every weekend near you",
   },
   {
     id: 2,
-    imageUrl: "/banner/banner2.png", // Update with your PNG path
+    imageUrl: "/banner/Banner2.png", // Update with your PNG path
     alt: "As the children book the workshop and complete the robotics and coding missions, they win multiple points, goodies and are awarded a robotics and coding workshop participation certificate. Children also receive learning flashcards,  LEGO  design challenge sheet, students newsletter on tech, space and robotics  for home",
   },
   {
     id: 3,
-    imageUrl: "/banner/banner3.png", // Update with your PNG path
+    imageUrl: "/banner/Banner3.png", // Update with your PNG path
     alt: "GeniusLabs is also organising Robotics and Product Design Workshops powered by Lego Education at Dibber International Preschool. Dibber International Preschool located at Sector 122 is a preschool that uses the Nordic approach to early childhood education. Book the workshops and Experience  the power of  hands-on learning.",
   },
 ]
@@ -162,7 +162,6 @@ export default function EventBannerCarousel() {
               priority={index === 0} // Load first image immediately
               className="object-cover"
               draggable={false}
-              unoptimized // Since we're using local PNG files
             />
           </div>
         ))}
