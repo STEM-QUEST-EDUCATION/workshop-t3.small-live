@@ -12,6 +12,10 @@ import LoadingAnimation from "@/components/ui/loading-animation";
 // import { logEvent } from "firebase/analytics";
 import "@/styles/fonts";
 import Footerpage from "@/components/ui/Footerpage";
+import EventBannerCarousel from "@/components/EventBannerCarousel"
+import EducationStats from "@/components/education-stats"
+import WhyGeniusLabs from "@/components/why-geniuslabs";
+import FAQComponent from "@/components/FAQComponent"
 
 interface Workshop {
   _id: string; // Unique identifier for the workshop
@@ -114,9 +118,7 @@ export default function Page() {
             <h1 className="text-2xl font-bold text-blue-gl">
               Welcome <span className="inline-block animate-wave">👋</span>
             </h1>
-            <p className="text-sm text-muted-foreground whitespace-nowrap">
-              To Lego-In-Action Workshops
-            </p>
+            
           </div>
 
           {/* Responsive Logo */}
@@ -133,8 +135,14 @@ export default function Page() {
         </div>
       </div>
 
-      {/* Fixed Workshop Date Picker */}
-      <div className="fixed top-[105px] left-0 right-0 max-w-md mx-auto z-20 px-4">
+      <EventBannerCarousel />
+
+      <EducationStats />
+
+      <WhyGeniusLabs />
+
+      {/* Workshop Date Picker */}
+      <div className="px-4 mt-6">
         <WorkshopDatePicker
           stepLabel="Step 1"
           title="Pick up your workshop date"
@@ -142,7 +150,7 @@ export default function Page() {
       </div>
 
       {/* Main Content */}
-      <div className="p-4 mt-[75px]">
+      <div className="p-4 mt-4">
         {isLoading ? (
           <LoadingAnimation />
         ) : (
@@ -168,6 +176,9 @@ export default function Page() {
           ))
         )}
       </div>
+      
+      <FAQComponent />
+
       <Footerpage />
 
       {/* Footer */}
