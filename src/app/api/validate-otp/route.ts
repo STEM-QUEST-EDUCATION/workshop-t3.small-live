@@ -1,7 +1,8 @@
 // pages/api/validate-otp/route.ts
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
-import OtpModel from "@/models/Otp";
+import OtpModel, { OtpQuery, SortOptions } from "@/models/Otp";
 import { BookingModel } from "@/models/Booking"; 
 
 async function isValidOTP(mobileNumber: string, otp: string, transactionId: string): Promise<boolean> {
@@ -13,12 +14,19 @@ async function isValidOTP(mobileNumber: string, otp: string, transactionId: stri
     const formattedOtp = String(otp).trim();
 
     // Find the latest OTP for this transaction
-    const otpRecord = await OtpModel.findOne({
+    const query: OtpQuery = {
       mobileNumber: formattedMobile,
       transactionId,
       isVerified: false,
       expiresAt: { $gt: new Date() }
-    }).sort({ timestamp: -1 }); // Get the most recent OTP
+    };
+    
+    // Create and use the OTP query with proper type handling
+    const otpQuery = OtpModel.findOne(query);
+    
+    // The sort operation is handled differently based on implementation
+    const sortOptions: SortOptions = { timestamp: -1 };
+    const otpRecord = await (otpQuery as any).sort(sortOptions);
 
     console.log('Found OTP record:', otpRecord);
 

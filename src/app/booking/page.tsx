@@ -251,9 +251,16 @@ export default function HomePage() {
         }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to send OTP");
+        // Check if it's a rate limit error
+        if (response.status === 429) {
+          setPaymentInitiated(false);
+          alert(`SMS limit exceeded: ${data.error}. If you think this is an issue on our hand please contact support on +91 9468074074.`);
+          return;
+        }
+        throw new Error(data.error || "Failed to send OTP");
       }
 
       setShowOtpPopup(true);

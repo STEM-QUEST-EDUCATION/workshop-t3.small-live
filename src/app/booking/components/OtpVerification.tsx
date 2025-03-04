@@ -17,6 +17,7 @@ export default function OtpVerification({ closePopup, setOtp, onOtpVerified }: O
   const [otp, _setOtp] = useState<string[]>(Array(6).fill(""));
   const [timeLeft, setTimeLeft] = useState(60); // 60 seconds
   const [isVerifying, setIsVerifying] = useState(false); // Add state for verifying
+  const [remainingQuota, setRemainingQuota] = useState<number | null>(null); // Add state for remaining quota
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
@@ -68,9 +69,20 @@ export default function OtpVerification({ closePopup, setOtp, onOtpVerified }: O
         }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to send OTP");
+        // Check if it's a rate limit error
+        if (response.status === 429) {
+          alert(`SMS limit exceeded: ${data.error}`);
+          return;
+        }
+        throw new Error(data.error || "Failed to send OTP");
+      }
+
+      // Set remaining quota if available
+      if (data.remainingQuota !== undefined) {
+        setRemainingQuota(data.remainingQuota);
       }
 
       alert("OTP has been re-sent to your phone number");
@@ -170,6 +182,11 @@ export default function OtpVerification({ closePopup, setOtp, onOtpVerified }: O
             >
               Resend
             </Button>
+            {remainingQuota !== null && (
+              <div className="text-xs text-gray-500 mt-1">
+                You have {remainingQuota} SMS requests remaining today
+              </div>
+            )}
           </div>
           <Button
             className="w-full bg-[#00A0E4] text-white hover:bg-[#0090D4] mt-4"
