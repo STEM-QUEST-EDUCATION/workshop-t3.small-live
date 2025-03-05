@@ -6,45 +6,36 @@ export const revalidate = 3600; // Revalidate every hour
 
 export async function GET() {
   try {
-    // Connect to MongoDB
     await connectDB();
-
-    // Fetch workshops with lean() for better performance
     const workshops = await workshop
-      .find(
-        {},
-        {
-          _id: 1,
-          theme: 1,
-          date_of_workshop: 1,
-          meta: 1,
-        }
-      )
+      .find({}, { _id: 1, theme: 1, date_of_workshop: 1, meta: 1 })
       .lean();
 
     if (!workshops || workshops.length === 0) {
       throw new Error("No workshops found");
     }
 
-    // Base URL from environment variable
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
     if (!baseUrl) {
       throw new Error("NEXT_PUBLIC_BASE_URL is not defined");
     }
 
-    // Create the sitemap XML content
+    // Function to format date without milliseconds and with correct type
+    const formatDate = (date: Date) =>
+      new Date(date).toISOString().slice(0, 19) + "Z";
+
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
       <!-- Static Routes -->
       <url>
         <loc>${baseUrl}</loc>
-        <lastmod>${new Date().toISOString()}</lastmod>
+        <lastmod>${formatDate(new Date())}</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
       </url>
       <url>
         <loc>${baseUrl}/booking</loc>
-        <lastmod>${new Date().toISOString()}</lastmod>
+        <lastmod>${formatDate(new Date())}</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
       </url>
@@ -54,8 +45,8 @@ export async function GET() {
         .map(
           (workshop) => `
         <url>
-          <loc>${baseUrl}/${workshop._id}</loc>
-          <lastmod>${new Date(workshop.date_of_workshop).toISOString()}</lastmod>
+          <loc>${baseUrl}/${workshop._id as unknown as string}</loc>
+          <lastmod>${formatDate(workshop.date_of_workshop)}</lastmod>
           <changefreq>daily</changefreq>
           <priority>0.9</priority>
         </url>
@@ -64,7 +55,6 @@ export async function GET() {
         .join("")}
     </urlset>`;
 
-    // Return the XML with proper content type
     return new NextResponse(sitemap, {
       headers: {
         "Content-Type": "application/xml",
