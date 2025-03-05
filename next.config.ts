@@ -27,15 +27,16 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/sitemap.xml',
+        source: "/sitemap",
         headers: [
           {
-            key: 'Content-Type',
-            value: 'application/xml',
+            key: "Content-Type",
+            value: "application/xml",
           },
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=59',
+            key: "Cache-Control",
+            value:
+              "public, max-age=3600, s-maxage=3600, stale-while-revalidate=59",
           },
         ],
       },
