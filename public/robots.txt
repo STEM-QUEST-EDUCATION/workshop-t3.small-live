@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://workshops.geniuslabs.live/sitemap.xml
+Sitemap: https://workshops.geniuslabs.live/sitemap
 
 # Disallow specific paths
 Disallow: /api/*
