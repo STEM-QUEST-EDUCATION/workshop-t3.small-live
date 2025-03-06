@@ -25,7 +25,7 @@ export async function GET() {
       new Date(date).toISOString().slice(0, 19) + "Z";
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
       <!-- Static Routes -->
       <url>
         <loc>${baseUrl}</loc>
@@ -55,7 +55,7 @@ export async function GET() {
         .join("")}
     </urlset>`;
 
-    return new NextResponse(sitemap, {
+    return new NextResponse(sitemap.trim(), {
       headers: {
         "Content-Type": "application/xml",
         "Cache-Control":
