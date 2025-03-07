@@ -49,3 +49,5 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
+
+// up to date config
