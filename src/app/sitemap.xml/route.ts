@@ -2,8 +2,6 @@ import { connectDB } from "@/lib/mongodb";
 import { workshop } from "@/models/Workshop";
 import { NextResponse } from "next/server";
 
-export const revalidate = 3600; // Revalidate every hour
-
 export async function GET() {
   try {
     await connectDB();
@@ -58,8 +56,7 @@ export async function GET() {
     return new NextResponse(sitemap.trim(), {
       headers: {
         "Content-Type": "application/xml",
-        "Cache-Control":
-          "public, max-age=3600, s-maxage=3600, stale-while-revalidate=59",
+        "Cache-Control": "no-cache, no-store, must-revalidate",
       },
     });
   } catch (error) {

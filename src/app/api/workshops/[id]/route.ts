@@ -43,7 +43,12 @@ export async function GET(request: NextRequest) {
     // Respond with the fetched workshop data
     return NextResponse.json(
       { success: true, data: workshopData },
-      { status: 200 } // OK
+      { 
+        status: 200, // OK
+        headers: {
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+        }
+      }
     );
   } catch (error) {
     console.error("Error fetching workshop:", error);

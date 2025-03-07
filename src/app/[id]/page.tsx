@@ -14,7 +14,7 @@ function getApiUrl(id: string) {
 async function fetchWorkshop(id: string) {
   try {
     const response = await fetch(getApiUrl(id), { 
-      next: { revalidate: 3600 },
+      cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',
       },

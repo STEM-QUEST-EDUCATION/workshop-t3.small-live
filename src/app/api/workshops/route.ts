@@ -11,7 +11,14 @@ export const GET = async () => {
     const workshops = await workshop.find();
 
     // Return the workshops data
-    return NextResponse.json({ success: true, data: workshops });
+    return NextResponse.json(
+      { success: true, data: workshops },
+      {
+        headers: {
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+        }
+      }
+    );
   } catch (error) {
     console.error("Error fetching workshops:", error);
     return NextResponse.json(
