@@ -22,6 +22,11 @@ const nextConfig = {
         hostname: "dashboard.codeparrot.ai",
         pathname: "/api/assets/**",
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
     ],
   },
   async headers() {
