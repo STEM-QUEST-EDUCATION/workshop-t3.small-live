@@ -4,6 +4,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import StepIndicator from "./components/StepIndicator";
 import TimeSlotButton from "./components/TimeSlotButton";
@@ -160,13 +161,23 @@ export default function ClientWorkshopDetails({
         <div className="relative h-[50vh] rounded-b-[2rem] overflow-hidden">
           <div className="absolute inset-0 w-full h-full">
             {workshopData.workshop_url ? (
-              <iframe
-                className="absolute top-0 left-0 w-full h-full"
-                src={workshopData.workshop_url}
-                allow="autoplay; encrypted-media"
-                loading="lazy"
-                style={{ transform: "scale(1.1)", transformOrigin: "center" }}
-              />
+              workshopData.workshop_media_type === "video" ? (
+                <iframe
+                  className="absolute top-0 left-0 w-full h-full"
+                  src={workshopData.workshop_url}
+                  allow="autoplay; encrypted-media"
+                  loading="lazy"
+                  style={{ transform: "scale(1.1)", transformOrigin: "center" }}
+                />
+              ) : (
+                <Image
+                  src={workshopData.workshop_url}
+                  alt={`${workshopData.theme} Workshop Image`}
+                  layout="fill"
+                  objectFit="cover"
+                  className="absolute inset-0 w-full h-full"
+                />
+              )
             ) : (
               <div className="w-full h-full bg-gray-100 flex items-center justify-center">
                 <div className="flex flex-col items-center gap-3">
