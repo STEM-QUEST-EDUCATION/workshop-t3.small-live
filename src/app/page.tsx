@@ -24,6 +24,8 @@ interface Workshop {
   duration: number;
   rate: number;
   video_url: string;
+  image_url: string; // New field to store the image URL
+  media_type: "video" | "image"; // New field to indicate the type of media
   description: string;
   // location: string;
   likes: number;
@@ -161,7 +163,8 @@ export default function Page() {
                 date={workshop.date_of_workshop}
                 enrolled={workshop.children_enrolled}
                 price={workshop.rate}
-                src={workshop.video_url}
+                src={workshop.media_type === "video" ? workshop.video_url : workshop.image_url} // Use video_url or image_url based on media_type
+                isVideo={workshop.media_type === "video"} // Determine if the src is a video
                 theme={workshop.theme}
                 kitName={workshop.kit_name}
               />

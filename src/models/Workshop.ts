@@ -28,6 +28,8 @@ export interface WorkshopDocument extends Document {
   duration: number;
   rate: number;
   video_url: string;
+  image_url: string; // New field to store the image URL
+  media_type: "video" | "image"; // New field to indicate the type of media
   description: DescriptionItem[];
   location: {
     address: string;
@@ -51,7 +53,9 @@ const WorkshopSchema = new Schema<WorkshopDocument>({
   date_of_workshop: { type: String, required: true },
   duration: { type: Number, required: true },
   rate: { type: Number, required: true },
-  video_url: { type: String, required: true },
+  video_url: { type: String, required: false },
+  image_url: { type: String, required: false }, // New field
+  media_type: { type: String, enum: ["video", "image"], required: true }, // New field
   description: [
     {
       type: { type: String, enum: ["paragraph", "list"], required: true },

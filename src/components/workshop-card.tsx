@@ -32,6 +32,7 @@ interface WorkshopCardProps {
   enrolled: number;
   price: number;
   src: string;
+  isVideo: boolean; // New property to indicate if the src is a video URL
   theme: string;
   kitName: string;
 }
@@ -42,6 +43,7 @@ export function WorkshopCard({
   enrolled,
   price,
   src,
+  isVideo, // Destructure the new property
   theme,
   kitName,
 }: WorkshopCardProps) {
@@ -106,15 +108,27 @@ export function WorkshopCard({
       <div className="absolute inset-0 rounded-[12px] border-2 border-transparent group-hover:border-blue-300 animate-light-blue-shimmer"></div>
       <div className="relative">
         <div className="relative" style={{ width: "100%", height: "202.2px" }}>
-          <iframe
-            src={src}
-            allow="autoplay; encrypted-media"
-            className="absolute inset-0 w-full h-full"
-            frameBorder="0"
-            allowFullScreen
-            loading="lazy"
-            title={`${theme} Workshop Video`}
-          />
+          {src ? (
+            isVideo ? (
+              <iframe
+                src={src}
+                allow="autoplay; encrypted-media"
+                className="absolute inset-0 w-full h-full"
+                frameBorder="0"
+                allowFullScreen
+                loading="lazy"
+                title={`${theme} Workshop Video`}
+              />
+            ) : (
+              <Image
+                src={src}
+                alt={`${theme} Workshop Image`}
+                layout="fill"
+                objectFit="cover"
+                className="absolute inset-0 w-full h-full"
+              />
+            )
+          ) : null}
           <div className="absolute bottom-0 flex flex-col items-start w-full h-10 bg-black bg-opacity-80 px-4">
             <h4 className="text-amber-400 text-xs font-bold truncate">Workshop theme</h4>
             <h3 className="text-white text-lg font-bold truncate">{theme}</h3>

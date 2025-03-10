@@ -38,6 +38,10 @@ const workshopMeta: { [key: string]: { title: string; description: string } } = 
     title: "Drawing Robots Workshop",
     description: "🤖 Robots that Draw or Write! Kids 6-10+ build robots like iRoot, Spirograph, and CNC machines to create shapes, letters & patterns. 🎨 Hands-on learning with MIT Scratch! Develop creativity & coding skills at GeniusLabs. 🚀",
   },
+  "67cab965abb6a184893667c0": {
+    title: "Drawing Robots Workshop",
+    description: "🤖 Robots that Draw or Write! Kids 6-10+ build robots like iRoot, Spirograph, and CNC machines to create shapes, letters & patterns. 🎨 Hands-on learning with MIT Scratch! Develop creativity & coding skills at GeniusLabs. 🚀",
+  },
   // Add more workshop meta data here
 };
 
