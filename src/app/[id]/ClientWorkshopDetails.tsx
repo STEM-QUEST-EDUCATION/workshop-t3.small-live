@@ -179,16 +179,14 @@ export default function ClientWorkshopDetails({
                 />
               )
             ) : (
-              <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-                <div className="flex flex-col items-center gap-3">
-                  <div className="w-16 h-16 border-4 border-gray-200 border-t-[#09A5E8] rounded-full animate-spin" />
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-[#09A5E8] rounded-full animate-bounce [animation-delay:-0.3s]" />
-                    <div className="w-2 h-2 bg-[#09A5E8] rounded-full animate-bounce [animation-delay:-0.15s]" />
-                    <div className="w-2 h-2 bg-[#09A5E8] rounded-full animate-bounce" />
-                  </div>
-                </div>
-              </div>
+              <Image
+                src="/fallback-poster.png"
+                alt={`${workshopData.theme || 'Workshop'} Fallback Image`}
+                layout="fill"
+                objectFit="cover"
+                className="absolute inset-0 w-full h-full"
+                priority
+              />
             )}
           </div>
           <BackButtonDynamic />

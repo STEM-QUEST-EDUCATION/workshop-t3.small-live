@@ -46,8 +46,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {`
             {
               "@context": "https://schema.org",
-              "@type": "Course",
-              "name": "Lego Robotics & AI Workshops",
+              "@type": "EducationalOrganization",
+              "name": "Genius Labs",
               "description": "${META_DESCRIPTION}",
               "provider": {
                 "@type": "Organization",
