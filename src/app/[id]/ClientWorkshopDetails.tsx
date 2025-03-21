@@ -2,7 +2,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -56,6 +56,9 @@ export default function ClientWorkshopDetails({
   const [error, setError] = useState<string | null>(null);
   const [showClosedMessage, setShowClosedMessage] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoLoadError, setVideoLoadError] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const theme = initialData.theme;
 
@@ -90,6 +93,38 @@ export default function ClientWorkshopDetails({
       setAnalytics(getAnalytics(app));
     }
   }, []);
+
+  // Video retry mechanism
+  useEffect(() => {
+    if (workshopData?.workshop_media_type === "video" && iframeRef.current && videoLoadError) {
+      // Setup a retry mechanism if video fails to load
+      const retryTimeout = setTimeout(() => {
+        if (iframeRef.current) {
+          // Force iframe reload by setting src again
+          const currentSrc = iframeRef.current.src;
+          iframeRef.current.src = "";
+          setTimeout(() => {
+            if (iframeRef.current) {
+              iframeRef.current.src = currentSrc;
+              setVideoLoadError(false);
+            }
+          }, 100);
+        }
+      }, 1000);
+      
+      return () => clearTimeout(retryTimeout);
+    }
+  }, [videoLoadError, workshopData?.workshop_media_type]);
+
+  const handleVideoLoad = () => {
+    setVideoLoaded(true);
+    setVideoLoadError(false);
+  };
+
+  const handleVideoError = () => {
+    setVideoLoadError(true);
+    setVideoLoaded(false);
+  };
 
   const handleBookNow = async () => {
     if (!selectedTime || !workshopData) {
@@ -162,13 +197,42 @@ export default function ClientWorkshopDetails({
           <div className="absolute inset-0 w-full h-full">
             {workshopData.workshop_url ? (
               workshopData.workshop_media_type === "video" ? (
-                <iframe
-                  className="absolute top-0 left-0 w-full h-full"
-                  src={workshopData.workshop_url}
-                  allow="autoplay; encrypted-media"
-                  loading="lazy"
-                  style={{ transform: "scale(1.1)", transformOrigin: "center" }}
-                />
+                <>
+                  {!videoLoaded && !videoLoadError && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
+                      <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                  )}
+                  <iframe
+                    ref={iframeRef}
+                    className="absolute top-0 left-0 w-full h-full"
+                    src={`${workshopData.workshop_url}?autoplay=1`}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    loading="eager"
+                    onLoad={handleVideoLoad}
+                    onError={handleVideoError}
+                    style={{ 
+                      transform: "scale(1.1)", 
+                      transformOrigin: "center",
+                      visibility: videoLoaded ? 'visible' : 'hidden'
+                    }}
+                  />
+                  {videoLoadError && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
+                      <div className="text-center p-4">
+                        <p className="mb-2">Video loading failed</p>
+                        <Image
+                          src={workshopData.image_url || "/fallback-poster.png"}
+                          alt={`${workshopData.theme} Workshop Image`}
+                          layout="fill"
+                          objectFit="cover"
+                          className="absolute inset-0 w-full h-full z-0"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </>
               ) : (
                 <Image
                   src={workshopData.workshop_url}
@@ -176,6 +240,7 @@ export default function ClientWorkshopDetails({
                   layout="fill"
                   objectFit="cover"
                   className="absolute inset-0 w-full h-full"
+                  priority
                 />
               )
             ) : (
