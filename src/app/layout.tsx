@@ -42,17 +42,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Script>
 
         {/* Google Tag */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-6LCJRQRK8L">
-        </script>
-        <Script>
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
+        <Script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-6LCJRQRK8L"
+        strategy="afterInteractive"
+      />
 
-            gtag('config', 'G-6LCJRQRK8L');
-          `}
-        </Script>
+      {/* Initialize Google Analytics */}
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-6LCJRQRK8L');
+        `}
+      </Script>
 
         {/* Structured Data */}
         <script type="application/ld+json">
