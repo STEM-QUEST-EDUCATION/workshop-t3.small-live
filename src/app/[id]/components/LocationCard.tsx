@@ -5,16 +5,24 @@ import Image from "next/image";
 
 interface LocationCardProps {
   locationImages: string[];
+  location: {
+    address: string;
+    city: string;
+    country: string;
+  };
 }
 
-const LocationCard = ({ locationImages }: LocationCardProps) => {
+const LocationCard = ({ locationImages, location }: LocationCardProps) => {
+  const fullAddress = `${location.address}, ${location.city}, ${location.country}`;
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
+
   return (
     <div className="mb-10 bg-white rounded-lg mt-4">
       {/* Location Info */}
       <div className="flex items-center justify-between px-3 py-3.5">
         <div className="flex items-center gap-2.5">
           <a
-            href="https://maps.app.goo.gl/oGDvyS4AMor4pcGD6"
+            href={mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -24,16 +32,16 @@ const LocationCard = ({ locationImages }: LocationCardProps) => {
           </a>
           <div>
             <a
-              href="https://maps.app.goo.gl/oGDvyS4AMor4pcGD6"
+              href={mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
             >
               <h2 className="custom-font text-sm font-bold hover:underline">
-                Skymark One, Noida
+                {location.address}
               </h2>
             </a>
             <p className="custom-font text-sm font-bold text-gray-500">
-              Location
+              {location.city}, {location.country}
             </p>
           </div>
         </div>
@@ -45,7 +53,7 @@ const LocationCard = ({ locationImages }: LocationCardProps) => {
           {/* Duplicating images for smooth looping */}
           {locationImages.concat(locationImages).map((src, index) => (
             <Image
-              key={`${src}-${index}`} // Append index to ensure uniqueness
+              key={`${src}-${index}`}
               src={src}
               alt="Location"
               width={170}

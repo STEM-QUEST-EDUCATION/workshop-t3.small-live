@@ -287,7 +287,7 @@ export default function ClientWorkshopDetails({
             <WorkshopDetailsSection description={workshopData.description} />
             <Testimonials />
             <SkillCard skills={skills} />
-            <LocationCard locationImages={locationImages} />
+            <LocationCard locationImages={locationImages} location={workshopData.location} />
           </main>
 
           <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t mx-auto max-w-md">
