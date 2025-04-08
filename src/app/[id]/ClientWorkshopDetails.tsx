@@ -16,7 +16,7 @@ import SkillCard from "./components/SkillCard";
 import LocationCard from "./components/LocationCard";
 import WorkshopDetailsSection from "./components/WorkshopDetailsSection";
 import ErrorBoundary from "./components/ErrorBoundary";
-import { parse, differenceInHours, differenceInMinutes } from "date-fns";
+import { parse, differenceInMinutes } from "date-fns";
 import BookingClosedMessage from "./components/BookingClosedMessage";
 import { getAnalytics, logEvent, Analytics } from "firebase/analytics";
 import { app } from "@/lib/firebaseConfig"; // Adjust the import path based on your project structure
