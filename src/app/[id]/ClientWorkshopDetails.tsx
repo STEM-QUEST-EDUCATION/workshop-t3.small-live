@@ -16,7 +16,7 @@ import SkillCard from "./components/SkillCard";
 import LocationCard from "./components/LocationCard";
 import WorkshopDetailsSection from "./components/WorkshopDetailsSection";
 import ErrorBoundary from "./components/ErrorBoundary";
-import { parse, differenceInHours } from "date-fns";
+import { parse, differenceInHours, differenceInMinutes } from "date-fns";
 import BookingClosedMessage from "./components/BookingClosedMessage";
 import { getAnalytics, logEvent, Analytics } from "firebase/analytics";
 import { app } from "@/lib/firebaseConfig"; // Adjust the import path based on your project structure
@@ -171,7 +171,8 @@ export default function ClientWorkshopDetails({
     const [startTime, endTime] = timeSlot.split(" - ");
     const startDate = parse(startTime, "hh:mm a", new Date());
     const endDate = parse(endTime, "hh:mm a", new Date());
-    return differenceInHours(endDate, startDate);
+    const minutes = differenceInMinutes(endDate, startDate);
+    return minutes / 60;
   };
 
   if (!mounted) {
